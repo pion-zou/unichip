@@ -1,0 +1,43 @@
+body {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #f8f9fa;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+    font-weight: bold;
+}
+
+.alert {
+    border-radius: 6px;
+}
+
+.btn {
+    border-radius: 6px;
+}
+
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    body {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .card-body {
+        padding: 15px;
+    }
+}
