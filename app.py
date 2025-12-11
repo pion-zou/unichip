@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
@@ -16,7 +17,11 @@ except ImportError:
     print("警告: 未找到config.py，使用默认配置")
     # 默认配置
     app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/chips.db'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/chips.db'
+    uri = os.environ.get('POSTGRES_URL')
+    if uri and uri.startswith('postgres://'):
+        uri = uri.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
