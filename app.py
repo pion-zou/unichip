@@ -268,7 +268,7 @@ def admin_login():
             return redirect(url_for('admin_dashboard'))
         else:
             flash('用户名或密码错误', 'danger')
-    return render_template('admin/login.html', form=form)
+    return render_template('login.html', form=form)
 
 
 @app.route('/admin')
