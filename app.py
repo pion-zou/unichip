@@ -1,5 +1,4 @@
 import os
-import re
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
@@ -16,18 +15,47 @@ try:
 except ImportError:
     print("警告: 未找到config.py，使用默认配置")
     # 默认配置
-    app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/chips.db'
-    uri = os.environ.get('POSTGRES_URL')
-    if uri and uri.startswith('postgres://'):
-        uri = uri.replace('postgres://', 'postgresql://', 1)
-    app.config['SQLALCHEMY_DATABASE_URI'] = uri
+    app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'  # 建议设为环境变量 SECRET_KEY
+
+    # --- 核心修改 1：配置 Neon 数据库连接 ---
+    # 从环境变量读取 Neon 连接字符串 (变量名是 DATABASE_URL)
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url:
+        # 确保连接字符串以 postgresql:// 开头，并替换为 pg8000 驱动
+        if database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql+pg8000://', 1)
+        elif database_url.startswith('postgresql://'):
+            database_url = database_url.replace('postgresql://', 'postgresql+pg8000://', 1)
+        # 添加客户端编码参数（推荐）
+        if '?' not in database_url:
+            database_url += '?client_encoding=utf8'
+        else:
+            database_url += '&client_encoding=utf8'
+
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+
+    if not database_url:
+        # 生产环境必须设置此变量，此处打印明确错误
+        print("致命错误: 未找到 DATABASE_URL 环境变量。")
+        print("请在 Vercel 项目 Settings -> Environment Variables 中添加 DATABASE_URL，值为你的 Neon 连接字符串。")
+        # 为了防止应用在未配置数据库时启动，可以选择主动引发错误
+        # raise ValueError("DATABASE_URL environment variable is not set")
+        # 或者，如果你希望应用在本地不使用数据库也能运行，可以保留一个None值，但生产环境必须配置。
+        app.config['SQLALCHEMY_DATABASE_URI'] = None
+    else:
+        # Neon 提供的连接字符串通常已是正确的 postgresql:// 开头，此处理解性替换以防万一
+        if database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql://', 1)
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+        print(f"数据库连接配置成功，主机: {database_url.split('@')[1].split('/')[0] if '@' in database_url else '未知'}")
+    # --- 核心修改 1 结束 ---
+
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'your_email@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'your_app_password'
+    app.config['MAIL_USERNAME'] = 'your_email@gmail.com'  # 建议设为环境变量 MAIL_USERNAME
+    app.config['MAIL_PASSWORD'] = 'your_app_password'  # 建议设为环境变量 MAIL_PASSWORD
     app.config['MAIL_DEFAULT_SENDER'] = 'your_email@gmail.com'
 
 # 初始化扩展
@@ -100,30 +128,39 @@ class EmailSettingForm(FlaskForm):
 
 # 应用初始化
 with app.app_context():
-    # 确保数据库目录存在
-    os.makedirs('database', exist_ok=True)
-    db.create_all()
+    # --- 核心修改 2：删除本地目录创建 ---
+    # Vercel 文件系统只读，必须删除这行，否则会导致运行时错误
+    # os.makedirs('database', exist_ok=True)
 
-    # 确保有默认的邮箱设置
-    if not Setting.query.filter_by(key='email_recipient').first():
-        default_email = app.config.get('MAIL_USERNAME', '395610992@qq.com')
-        setting = Setting(key='email_recipient', value=default_email)
-        db.session.add(setting)
-        db.session.commit()
+    # 只有配置了数据库连接字符串时才尝试创建表
+    if app.config.get('SQLALCHEMY_DATABASE_URI'):
+        db.create_all()
+        print("数据库表创建/检查完成。")
 
-    # 添加一些示例芯片数据（如果数据库为空）
-    if Chip.query.count() == 0:
-        sample_chips = [
-            Chip(model='STM32F103C8T6', description='ARM Cortex-M3 32位MCU，64KB Flash，20KB RAM', stock=150, price=12.5),
-            Chip(model='ATmega328P', description='8位AVR微控制器，32KB Flash，2KB SRAM', stock=300, price=3.2),
-            Chip(model='ESP32-WROOM-32', description='双核WiFi+蓝牙MCU模块，4MB Flash', stock=200, price=8.9),
-            Chip(model='Raspberry Pi Pico', description='RP2040双核ARM Cortex-M0+ MCU', stock=100, price=4.0),
-            Chip(model='MAX232', description='RS-232收发器芯片，用于串口通信', stock=500, price=1.5),
-        ]
-        for chip in sample_chips:
-            db.session.add(chip)
-        db.session.commit()
-        print("已添加示例芯片数据")
+        # 确保有默认的邮箱设置
+        if not Setting.query.filter_by(key='email_recipient').first():
+            default_email = app.config.get('MAIL_USERNAME', '395610992@qq.com')
+            setting = Setting(key='email_recipient', value=default_email)
+            db.session.add(setting)
+            db.session.commit()
+            print("已创建默认邮箱设置。")
+
+        # 添加一些示例芯片数据（如果数据库为空）
+        if Chip.query.count() == 0:
+            sample_chips = [
+                Chip(model='STM32F103C8T6', description='ARM Cortex-M3 32位MCU，64KB Flash，20KB RAM', stock=150,
+                     price=12.5),
+                Chip(model='ATmega328P', description='8位AVR微控制器，32KB Flash，2KB SRAM', stock=300, price=3.2),
+                Chip(model='ESP32-WROOM-32', description='双核WiFi+蓝牙MCU模块，4MB Flash', stock=200, price=8.9),
+                Chip(model='Raspberry Pi Pico', description='RP2040双核ARM Cortex-M0+ MCU', stock=100, price=4.0),
+                Chip(model='MAX232', description='RS-232收发器芯片，用于串口通信', stock=500, price=1.5),
+            ]
+            for chip in sample_chips:
+                db.session.add(chip)
+            db.session.commit()
+            print("已添加示例芯片数据")
+    else:
+        print("警告: 未配置数据库连接，跳过表创建和数据初始化。")
 
 
 # 获取接收邮件的地址
