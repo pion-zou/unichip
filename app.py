@@ -6,11 +6,8 @@ from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from wtforms import StringField, IntegerField, TextAreaField, PasswordField, EmailField, FloatField
 from wtforms.validators import DataRequired, Email, NumberRange
-from sqlalchemy import create_engine
-import pg8000  # 显式导入以确保驱动可用
 
-
-# 在 app.py 的配置部分修改如下：
+# 在 app.py 的配置部分简化处理
 
 app = Flask(__name__)
 
@@ -39,33 +36,40 @@ except ImportError as e:
     database_url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL')
 
     if database_url:
-        # 确保使用 pg8000 驱动
+        print(f"从环境变量获取数据库URL: {database_url[:50]}...")
+
+        # 移除 sslmode 参数
+        if 'sslmode=require' in database_url:
+            database_url = database_url.replace('sslmode=require', '')
+            # 清理多余的 ? 或 &
+            database_url = database_url.replace('??', '?').rstrip('?')
+            print("已移除 sslmode=require 参数")
+
+        # 添加 pg8000 驱动
         if database_url.startswith('postgresql://'):
             database_url = database_url.replace('postgresql://', 'postgresql+pg8000://', 1)
         elif database_url.startswith('postgres://'):
             database_url = database_url.replace('postgres://', 'postgresql+pg8000://', 1)
 
-        # 添加客户端编码参数（推荐）
-        if '?' not in database_url:
-            database_url += '?client_encoding=utf8'
-        else:
-            database_url += '&client_encoding=utf8'
-
         app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-        print(f"配置: 使用环境变量中的 PostgreSQL 数据库")
+
+        # 简单的引擎选项，不传递 ssl 参数
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+            'pool_recycle': 300,
+            'pool_pre_ping': True,
+            'connect_args': {
+                'timeout': 10,
+            }
+        }
+
+        print("配置: 使用环境变量中的 PostgreSQL 数据库")
     else:
         print("警告: 未找到数据库连接字符串，使用本地 SQLite")
         # 本地开发时使用 SQLite
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/local.db'
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-        'pool_recycle': 300,
-        'pool_pre_ping': True,
-        'connect_args': {
-            'timeout': 10
-        }
-    }
 
     # 邮件配置（可选）
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -78,45 +82,11 @@ except ImportError as e:
 # 初始化扩展
 csrf = CSRFProtect(app)
 
+# 创建 SQLAlchemy 实例
+db = SQLAlchemy()
 
-# 手动创建引擎以确保使用 pg8000
-def create_db_engine(app):
-    """创建数据库引擎，确保使用 pg8000 驱动"""
-    if app.config.get('SQLALCHEMY_DATABASE_URI'):
-        # 确保 URI 包含 pg8000 驱动
-        uri = app.config['SQLALCHEMY_DATABASE_URI']
-        if 'postgresql+pg8000://' not in uri:
-            # 如果 URI 不包含 pg8000，尝试添加
-            if uri.startswith('postgresql://'):
-                uri = uri.replace('postgresql://', 'postgresql+pg8000://', 1)
-            elif uri.startswith('postgres://'):
-                uri = uri.replace('postgres://', 'postgresql+pg8000://', 1)
-            app.config['SQLALCHEMY_DATABASE_URI'] = uri
-
-        # 创建引擎并指定使用 pg8000
-        engine_options = app.config.get('SQLALCHEMY_ENGINE_OPTIONS', {})
-        return create_engine(
-            app.config['SQLALCHEMY_DATABASE_URI'],
-            **engine_options
-        )
-    return None
-
-
-# 初始化 SQLAlchemy
-db = SQLAlchemy(app)
-
-# 如果配置了数据库 URI，手动替换引擎
-if app.config.get('SQLALCHEMY_DATABASE_URI'):
-    try:
-        engine = create_db_engine(app)
-        if engine:
-            db.engine = engine
-            db.session.bind = engine
-            print("已成功创建 pg8000 数据库引擎")
-    except Exception as e:
-        print(f"创建数据库引擎时出错: {e}")
-        # 继续运行应用，但数据库功能可能不可用
-        print("警告: 数据库连接失败，应用将继续运行但数据库功能不可用")
+# 初始化 SQLAlchemy 扩展
+db.init_app(app)
 
 
 # 数据库模型
@@ -536,9 +506,10 @@ def health():
     return jsonify({'status': 'ok', 'message': '应用运行正常'})
 
 
-# 确保 Vercel 使用正确的应用实例
-app = app
+# 删除这行，它是不必要的
+# app = app
 
 if __name__ == '__main__':
     # 本地开发时运行
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
