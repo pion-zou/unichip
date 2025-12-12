@@ -3,29 +3,48 @@ from datetime import datetime
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from flask_wtf.csrf import CSRFProtect, CSRFError  # 确保已导入
-from wtforms import StringField, IntegerField, TextAreaField, PasswordField, EmailField, FloatField, HiddenField
+from flask_wtf.csrf import CSRFProtect, CSRFError
+from wtforms import StringField, IntegerField, TextAreaField, PasswordField, EmailField, FloatField
 from wtforms.validators import DataRequired, Email, NumberRange
+from sqlalchemy import create_engine
+import pg8000  # 显式导入以确保驱动可用
+
+
+# 在 app.py 的配置部分修改如下：
 
 app = Flask(__name__)
 
 # 尝试从config.py导入配置，如果失败则使用默认配置
 try:
     app.config.from_object('config.Config')
-except ImportError:
-    print("警告: 未找到config.py，使用默认配置")
-    # 默认配置
-    app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'  # 建议设为环境变量 SECRET_KEY
+    print("配置: 已加载 config.py 配置")
 
-    # --- 核心修改 1：配置 Neon 数据库连接 ---
-    # 从环境变量读取 Neon 连接字符串 (变量名是 DATABASE_URL)
-    database_url = os.environ.get('DATABASE_URL')
+    # 打印数据库类型用于调试
+    db_uri = app.config.get('SQLALCHEMY_DATABASE_URI', '')
+    if 'postgresql+pg8000://' in db_uri:
+        print("配置: 使用 PostgreSQL + pg8000 (Neon)")
+    elif 'sqlite:///' in db_uri:
+        print("配置: 使用本地 SQLite")
+    else:
+        print("配置: 未配置数据库")
+
+except ImportError as e:
+    print(f"警告: 未找到config.py，错误: {e}")
+    print("警告: 使用硬编码默认配置")
+
+    # 默认配置（仅在找不到config.py时使用）
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
+
+    # 尝试从环境变量获取数据库连接
+    database_url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL')
+
     if database_url:
-        # 确保连接字符串以 postgresql:// 开头，并替换为 pg8000 驱动
-        if database_url.startswith('postgres://'):
-            database_url = database_url.replace('postgres://', 'postgresql+pg8000://', 1)
-        elif database_url.startswith('postgresql://'):
+        # 确保使用 pg8000 驱动
+        if database_url.startswith('postgresql://'):
             database_url = database_url.replace('postgresql://', 'postgresql+pg8000://', 1)
+        elif database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql+pg8000://', 1)
+
         # 添加客户端编码参数（推荐）
         if '?' not in database_url:
             database_url += '?client_encoding=utf8'
@@ -33,34 +52,71 @@ except ImportError:
             database_url += '&client_encoding=utf8'
 
         app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-
-    if not database_url:
-        # 生产环境必须设置此变量，此处打印明确错误
-        print("致命错误: 未找到 DATABASE_URL 环境变量。")
-        print("请在 Vercel 项目 Settings -> Environment Variables 中添加 DATABASE_URL，值为你的 Neon 连接字符串。")
-        # 为了防止应用在未配置数据库时启动，可以选择主动引发错误
-        # raise ValueError("DATABASE_URL environment variable is not set")
-        # 或者，如果你希望应用在本地不使用数据库也能运行，可以保留一个None值，但生产环境必须配置。
-        app.config['SQLALCHEMY_DATABASE_URI'] = None
+        print(f"配置: 使用环境变量中的 PostgreSQL 数据库")
     else:
-        # Neon 提供的连接字符串通常已是正确的 postgresql:// 开头，此处理解性替换以防万一
-        if database_url.startswith('postgres://'):
-            database_url = database_url.replace('postgres://', 'postgresql://', 1)
-        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-        print(f"数据库连接配置成功，主机: {database_url.split('@')[1].split('/')[0] if '@' in database_url else '未知'}")
-    # --- 核心修改 1 结束 ---
+        print("警告: 未找到数据库连接字符串，使用本地 SQLite")
+        # 本地开发时使用 SQLite
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/local.db'
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'pool_recycle': 300,
+        'pool_pre_ping': True,
+        'connect_args': {
+            'timeout': 10
+        }
+    }
+
+    # 邮件配置（可选）
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'your_email@gmail.com'  # 建议设为环境变量 MAIL_USERNAME
-    app.config['MAIL_PASSWORD'] = 'your_app_password'  # 建议设为环境变量 MAIL_PASSWORD
-    app.config['MAIL_DEFAULT_SENDER'] = 'your_email@gmail.com'
+    app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', '')
+    app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', '')
+    app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', '')
 
 # 初始化扩展
 csrf = CSRFProtect(app)
+
+
+# 手动创建引擎以确保使用 pg8000
+def create_db_engine(app):
+    """创建数据库引擎，确保使用 pg8000 驱动"""
+    if app.config.get('SQLALCHEMY_DATABASE_URI'):
+        # 确保 URI 包含 pg8000 驱动
+        uri = app.config['SQLALCHEMY_DATABASE_URI']
+        if 'postgresql+pg8000://' not in uri:
+            # 如果 URI 不包含 pg8000，尝试添加
+            if uri.startswith('postgresql://'):
+                uri = uri.replace('postgresql://', 'postgresql+pg8000://', 1)
+            elif uri.startswith('postgres://'):
+                uri = uri.replace('postgres://', 'postgresql+pg8000://', 1)
+            app.config['SQLALCHEMY_DATABASE_URI'] = uri
+
+        # 创建引擎并指定使用 pg8000
+        engine_options = app.config.get('SQLALCHEMY_ENGINE_OPTIONS', {})
+        return create_engine(
+            app.config['SQLALCHEMY_DATABASE_URI'],
+            **engine_options
+        )
+    return None
+
+
+# 初始化 SQLAlchemy
 db = SQLAlchemy(app)
+
+# 如果配置了数据库 URI，手动替换引擎
+if app.config.get('SQLALCHEMY_DATABASE_URI'):
+    try:
+        engine = create_db_engine(app)
+        if engine:
+            db.engine = engine
+            db.session.bind = engine
+            print("已成功创建 pg8000 数据库引擎")
+    except Exception as e:
+        print(f"创建数据库引擎时出错: {e}")
+        # 继续运行应用，但数据库功能可能不可用
+        print("警告: 数据库连接失败，应用将继续运行但数据库功能不可用")
 
 
 # 数据库模型
@@ -128,45 +184,48 @@ class EmailSettingForm(FlaskForm):
 
 # 应用初始化
 with app.app_context():
-    # --- 核心修改 2：删除本地目录创建 ---
-    # Vercel 文件系统只读，必须删除这行，否则会导致运行时错误
-    # os.makedirs('database', exist_ok=True)
-
     # 只有配置了数据库连接字符串时才尝试创建表
     if app.config.get('SQLALCHEMY_DATABASE_URI'):
-        db.create_all()
-        print("数据库表创建/检查完成。")
+        try:
+            db.create_all()
+            print("数据库表创建/检查完成。")
 
-        # 确保有默认的邮箱设置
-        if not Setting.query.filter_by(key='email_recipient').first():
-            default_email = app.config.get('MAIL_USERNAME', '395610992@qq.com')
-            setting = Setting(key='email_recipient', value=default_email)
-            db.session.add(setting)
-            db.session.commit()
-            print("已创建默认邮箱设置。")
+            # 确保有默认的邮箱设置
+            if not Setting.query.filter_by(key='email_recipient').first():
+                default_email = app.config.get('MAIL_USERNAME', '395610992@qq.com')
+                setting = Setting(key='email_recipient', value=default_email)
+                db.session.add(setting)
+                db.session.commit()
+                print("已创建默认邮箱设置。")
 
-        # 添加一些示例芯片数据（如果数据库为空）
-        if Chip.query.count() == 0:
-            sample_chips = [
-                Chip(model='STM32F103C8T6', description='ARM Cortex-M3 32位MCU，64KB Flash，20KB RAM', stock=150,
-                     price=12.5),
-                Chip(model='ATmega328P', description='8位AVR微控制器，32KB Flash，2KB SRAM', stock=300, price=3.2),
-                Chip(model='ESP32-WROOM-32', description='双核WiFi+蓝牙MCU模块，4MB Flash', stock=200, price=8.9),
-                Chip(model='Raspberry Pi Pico', description='RP2040双核ARM Cortex-M0+ MCU', stock=100, price=4.0),
-                Chip(model='MAX232', description='RS-232收发器芯片，用于串口通信', stock=500, price=1.5),
-            ]
-            for chip in sample_chips:
-                db.session.add(chip)
-            db.session.commit()
-            print("已添加示例芯片数据")
+            # 添加一些示例芯片数据（如果数据库为空）
+            if Chip.query.count() == 0:
+                sample_chips = [
+                    Chip(model='STM32F103C8T6', description='ARM Cortex-M3 32位MCU，64KB Flash，20KB RAM', stock=150,
+                         price=12.5),
+                    Chip(model='ATmega328P', description='8位AVR微控制器，32KB Flash，2KB SRAM', stock=300, price=3.2),
+                    Chip(model='ESP32-WROOM-32', description='双核WiFi+蓝牙MCU模块，4MB Flash', stock=200, price=8.9),
+                    Chip(model='Raspberry Pi Pico', description='RP2040双核ARM Cortex-M0+ MCU', stock=100, price=4.0),
+                    Chip(model='MAX232', description='RS-232收发器芯片，用于串口通信', stock=500, price=1.5),
+                ]
+                for chip in sample_chips:
+                    db.session.add(chip)
+                db.session.commit()
+                print("已添加示例芯片数据")
+        except Exception as e:
+            print(f"数据库初始化错误: {e}")
+            print("警告: 数据库初始化失败，应用将继续运行但数据库功能可能不可用")
     else:
         print("警告: 未配置数据库连接，跳过表创建和数据初始化。")
 
 
 # 获取接收邮件的地址
 def get_email_recipient():
-    setting = Setting.query.filter_by(key='email_recipient').first()
-    return setting.value if setting else app.config.get('MAIL_USERNAME', '395610992@qq.com')
+    try:
+        setting = Setting.query.filter_by(key='email_recipient').first()
+        return setting.value if setting else app.config.get('MAIL_USERNAME', '395610992@qq.com')
+    except Exception:
+        return app.config.get('MAIL_USERNAME', '395610992@qq.com')
 
 
 # 发送联系邮件
@@ -185,21 +244,25 @@ def send_contact_email(contact):
 """
 
     try:
-        import smtplib
-        from email.mime.text import MIMEText
+        # 只有在配置了邮件服务器时才尝试发送
+        if app.config.get('MAIL_USERNAME') and app.config.get('MAIL_PASSWORD'):
+            import smtplib
+            from email.mime.text import MIMEText
 
-        msg = MIMEText(body)
-        msg['Subject'] = subject
-        msg['From'] = app.config.get('MAIL_USERNAME', 'noreply@example.com')
-        msg['To'] = recipient
+            msg = MIMEText(body)
+            msg['Subject'] = subject
+            msg['From'] = app.config.get('MAIL_USERNAME', 'noreply@example.com')
+            msg['To'] = recipient
 
-        with smtplib.SMTP(app.config.get('MAIL_SERVER', 'smtp.gmail.com'),
-                          app.config.get('MAIL_PORT', 587)) as server:
-            server.starttls()
-            server.login(app.config.get('MAIL_USERNAME', ''),
-                         app.config.get('MAIL_PASSWORD', ''))
-            server.sendmail(msg['From'], [msg['To']], msg.as_string())
-        print(f"邮件已发送到: {recipient}")
+            with smtplib.SMTP(app.config.get('MAIL_SERVER', 'smtp.gmail.com'),
+                              app.config.get('MAIL_PORT', 587)) as server:
+                server.starttls()
+                server.login(app.config.get('MAIL_USERNAME', ''),
+                             app.config.get('MAIL_PASSWORD', ''))
+                server.sendmail(msg['From'], [msg['To']], msg.as_string())
+            print(f"邮件已发送到: {recipient}")
+        else:
+            print("邮件配置不完整，跳过发送")
         return True
     except Exception as e:
         print(f"发送邮件失败: {e}")
@@ -244,11 +307,15 @@ def search():
         return jsonify({'error': '请输入有效的芯片型号'}), 400
 
     # 模糊查询，不区分大小写
-    chip = Chip.query.filter(Chip.model.ilike(f'%{model}%')).first()
-    if chip:
-        return jsonify(chip.to_dict())
-    else:
-        return jsonify({'error': f'未找到型号包含"{model}"的芯片'}), 404
+    try:
+        chip = Chip.query.filter(Chip.model.ilike(f'%{model}%')).first()
+        if chip:
+            return jsonify(chip.to_dict())
+        else:
+            return jsonify({'error': f'未找到型号包含"{model}"的芯片'}), 404
+    except Exception as e:
+        print(f"数据库查询错误: {e}")
+        return jsonify({'error': '数据库查询失败，请稍后重试'}), 500
 
 
 @app.route('/contact', methods=['POST'])
@@ -319,11 +386,19 @@ def admin_dashboard():
     if not session.get('admin_logged_in'):
         return redirect(url_for('admin_login'))
 
-    chips = Chip.query.all()
+    try:
+        chips = Chip.query.all()
+    except Exception:
+        chips = []
+
     email_form = EmailSettingForm()
-    setting = Setting.query.filter_by(key='email_recipient').first()
-    if setting:
-        email_form.email.data = setting.value
+    try:
+        setting = Setting.query.filter_by(key='email_recipient').first()
+        if setting:
+            email_form.email.data = setting.value
+    except Exception:
+        pass
+
     return render_template('admin.html', chips=chips, email_form=email_form)
 
 
@@ -334,19 +409,23 @@ def add_chip():
 
     form = ChipForm()
     if form.validate_on_submit():
-        # 检查型号是否已存在
-        if Chip.query.filter_by(model=form.model.data).first():
-            return jsonify({'error': '该型号已存在'}), 400
+        try:
+            # 检查型号是否已存在
+            if Chip.query.filter_by(model=form.model.data).first():
+                return jsonify({'error': '该型号已存在'}), 400
 
-        chip = Chip(
-            model=form.model.data,
-            description=form.description.data,
-            stock=form.stock.data,
-            price=form.price.data
-        )
-        db.session.add(chip)
-        db.session.commit()
-        return jsonify({'message': '芯片添加成功', 'chip': chip.to_dict()})
+            chip = Chip(
+                model=form.model.data,
+                description=form.description.data,
+                stock=form.stock.data,
+                price=form.price.data
+            )
+            db.session.add(chip)
+            db.session.commit()
+            return jsonify({'message': '芯片添加成功', 'chip': chip.to_dict()})
+        except Exception as e:
+            print(f"添加芯片错误: {e}")
+            return jsonify({'error': '数据库操作失败'}), 500
     else:
         errors = []
         for field, errs in form.errors.items():
@@ -360,8 +439,12 @@ def get_chip(id):
     if not session.get('admin_logged_in'):
         return jsonify({'error': '未授权'}), 401
 
-    chip = Chip.query.get_or_404(id)
-    return jsonify(chip.to_dict())
+    try:
+        chip = Chip.query.get_or_404(id)
+        return jsonify(chip.to_dict())
+    except Exception as e:
+        print(f"获取芯片错误: {e}")
+        return jsonify({'error': '数据库操作失败'}), 500
 
 
 @app.route('/admin/chip/update/<int:id>', methods=['POST'])
@@ -369,20 +452,28 @@ def update_chip(id):
     if not session.get('admin_logged_in'):
         return jsonify({'error': '未授权'}), 401
 
-    chip = Chip.query.get_or_404(id)
+    try:
+        chip = Chip.query.get_or_404(id)
+    except Exception:
+        return jsonify({'error': '芯片未找到'}), 404
+
     form = ChipForm()
     if form.validate_on_submit():
-        # 检查型号是否已被其他芯片使用
-        existing = Chip.query.filter(Chip.model == form.model.data, Chip.id != id).first()
-        if existing:
-            return jsonify({'error': '该型号已存在'}), 400
+        try:
+            # 检查型号是否已被其他芯片使用
+            existing = Chip.query.filter(Chip.model == form.model.data, Chip.id != id).first()
+            if existing:
+                return jsonify({'error': '该型号已存在'}), 400
 
-        chip.model = form.model.data
-        chip.description = form.description.data
-        chip.stock = form.stock.data
-        chip.price = form.price.data
-        db.session.commit()
-        return jsonify({'message': '芯片更新成功', 'chip': chip.to_dict()})
+            chip.model = form.model.data
+            chip.description = form.description.data
+            chip.stock = form.stock.data
+            chip.price = form.price.data
+            db.session.commit()
+            return jsonify({'message': '芯片更新成功', 'chip': chip.to_dict()})
+        except Exception as e:
+            print(f"更新芯片错误: {e}")
+            return jsonify({'error': '数据库操作失败'}), 500
     else:
         errors = []
         for field, errs in form.errors.items():
@@ -396,10 +487,14 @@ def delete_chip(id):
     if not session.get('admin_logged_in'):
         return jsonify({'error': '未授权'}), 401
 
-    chip = Chip.query.get_or_404(id)
-    db.session.delete(chip)
-    db.session.commit()
-    return jsonify({'message': '芯片删除成功'})
+    try:
+        chip = Chip.query.get_or_404(id)
+        db.session.delete(chip)
+        db.session.commit()
+        return jsonify({'message': '芯片删除成功'})
+    except Exception as e:
+        print(f"删除芯片错误: {e}")
+        return jsonify({'error': '数据库操作失败'}), 500
 
 
 @app.route('/admin/settings/email', methods=['POST'])
@@ -409,14 +504,18 @@ def update_email_setting():
 
     form = EmailSettingForm()
     if form.validate_on_submit():
-        setting = Setting.query.filter_by(key='email_recipient').first()
-        if not setting:
-            setting = Setting(key='email_recipient', value=form.email.data)
-            db.session.add(setting)
-        else:
-            setting.value = form.email.data
-        db.session.commit()
-        return jsonify({'message': '邮箱设置更新成功'})
+        try:
+            setting = Setting.query.filter_by(key='email_recipient').first()
+            if not setting:
+                setting = Setting(key='email_recipient', value=form.email.data)
+                db.session.add(setting)
+            else:
+                setting.value = form.email.data
+            db.session.commit()
+            return jsonify({'message': '邮箱设置更新成功'})
+        except Exception as e:
+            print(f"更新邮箱设置错误: {e}")
+            return jsonify({'error': '数据库操作失败'}), 500
     else:
         errors = []
         for field, errs in form.errors.items():
@@ -431,5 +530,15 @@ def admin_logout():
     return redirect(url_for('admin_login'))
 
 
+# 添加一个健康检查端点，供 Vercel 使用
+@app.route('/health')
+def health():
+    return jsonify({'status': 'ok', 'message': '应用运行正常'})
+
+
+# 确保 Vercel 使用正确的应用实例
+app = app
+
 if __name__ == '__main__':
+    # 本地开发时运行
     app.run(debug=True, host='0.0.0.0', port=5000)
