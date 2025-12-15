@@ -96,10 +96,23 @@ class Config:
     # SQLAlchemy 配置
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # 邮件配置
-    MAIL_SERVER = 'smtp.qiye.aliyun.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'postmaster@unichip.hk'
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'unichip@233'
-    MAIL_DEFAULT_SENDER = MAIL_USERNAME
+    # ====== 阿里云邮件推送 (DirectMail) 配置 ======
+    # 请确保以下敏感信息通过环境变量设置，不要硬编码！
+    ALIYUN_ACCESS_KEY_ID = os.environ.get('ALIYUN_ACCESS_KEY_ID')
+    ALIYUN_ACCESS_KEY_SECRET = os.environ.get('ALIYUN_ACCESS_KEY_SECRET')
+    # 地域ID，邮件推送服务通常为 `cn-hangzhou`
+    ALIYUN_REGION_ID = 'cn-hangzhou'
+    # 控制台中配置的**发信地址**，例如：no-reply@mail.unichip.hk
+    ALIYUN_ACCOUNT_NAME = os.environ.get('ALIYUN_ACCOUNT_NAME', 'no-reply@mail.unichip.hk')
+    # 发信人昵称（可选）
+    ALIYUN_FROM_ALIAS = os.environ.get('ALIYUN_FROM_ALIAS', 'Unichip客户系统')
+    # 邮件标签（可选，用于分类统计）
+    ALIYUN_TAG_NAME = 'website_contact'
+
+    # # 邮件配置
+    # MAIL_SERVER = 'smtp.qiye.aliyun.com'
+    # MAIL_PORT = 587
+    # MAIL_USE_TLS = True
+    # MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'postmaster@unichip.hk'
+    # MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'unichip@233'
+    # MAIL_DEFAULT_SENDER = MAIL_USERNAME

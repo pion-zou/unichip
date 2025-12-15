@@ -200,45 +200,67 @@ def get_email_recipient():
 
 # 发送联系邮件
 def send_contact_email(contact):
-    recipient = get_email_recipient()
-    subject = '新的芯片查询联系'
-    body = f"""
-新的联系信息：
+    """
+    使用阿里云邮件推送 API 发送联系表单邮件（针对 v0.4.2 修正版）
+    """
+    from alibabacloud_tea_openapi import models as open_api_models
+    from alibabacloud_dm20151123 import client as dm_client
+    from alibabacloud_dm20151123 import models as dm_models
+    # 1. 修正：从 alibabacloud_tea_util 导入 RuntimeOptions
+    from alibabacloud_tea_util import models as util_models
+    import json
 
-公司名: {contact.company}
-姓名: {contact.name}
-邮箱: {contact.email}
-电话: {contact.phone}
-留言: {contact.message}
+    recipient = get_email_recipient()
+    subject = f'芯片查询 - 来自 {contact.company} 的 {contact.name}'
+    html_body = f""" 新的联系信息：<br>
+
+公司名: {contact.company}<br>
+姓名: {contact.name}<br>
+邮箱: {contact.email}<br>
+电话: {contact.phone}<br>
+留言: {contact.message}<br>
 提交时间: {contact.timestamp.strftime('%Y-%m-%d %H:%M:%S')}
-"""
+"""  # 这里保留您之前编写的HTML邮件正文（请勿删除或修改）
 
     try:
-        # 只有在配置了邮件服务器时才尝试发送
-        if app.config.get('MAIL_USERNAME') and app.config.get('MAIL_PASSWORD'):
-            import smtplib
-            from email.mime.text import MIMEText
+        # 1. 使用新版的Config和Client初始化
+        config = open_api_models.Config(
+            access_key_id=app.config['ALIYUN_ACCESS_KEY_ID'],
+            access_key_secret=app.config['ALIYUN_ACCESS_KEY_SECRET'],
+            # 修正：region_id 对于邮件推送服务不是必须的，但可以保留
+            # region_id=app.config.get('ALIYUN_REGION_ID', 'cn-hangzhou')
+        )
+        config.endpoint = 'dm.aliyuncs.com'
+        client = dm_client.Client(config)
 
-            msg = MIMEText(body)
-            msg['Subject'] = subject
-            msg['From'] = app.config.get('MAIL_USERNAME', 'noreply@example.com')
-            msg['To'] = recipient
+        # 2. 构建新版API请求
+        request = dm_models.SingleSendMailRequest()
+        request.account_name = app.config['ALIYUN_ACCOUNT_NAME']  # 发信地址
+        request.address_type = 1  # 1: 发信地址
+        request.reply_to_address = False
+        request.to_address = recipient
+        request.subject = subject
+        request.html_body = html_body
+        request.from_alias = app.config.get('ALIYUN_FROM_ALIAS', '')  # 发信人昵称
 
-            with smtplib.SMTP(app.config.get('MAIL_SERVER', 'smtp.gmail.com'),
-                              app.config.get('MAIL_PORT', 587)) as server:
-                server.starttls()
-                server.login(app.config.get('MAIL_USERNAME', ''),
-                             app.config.get('MAIL_PASSWORD', ''))
-                server.sendmail(msg['From'], [msg['To']], msg.as_string())
-            print(f"邮件已发送到: {recipient}")
-        else:
-            print("邮件配置不完整，跳过发送")
+        # 3. 创建RuntimeOptions（可选，用于设置超时等）
+        runtime = util_models.RuntimeOptions()
+        # 您可以在此设置运行时参数，例如：
+        # runtime.read_timeout = 10000  # 读取超时10秒
+        # runtime.connect_timeout = 5000 # 连接超时5秒
+
+        # 4. 发送请求（传入 runtime）
+        response = client.single_send_mail_with_options(request, runtime)
+
+        # 5. 打印成功日志
+        print(f"[阿里云邮件推送] 邮件发送成功！RequestId: {response.body.request_id}")
         return True
-    except Exception as e:
-        print(f"发送邮件失败: {e}")
-        # 即使邮件发送失败，也不要影响主要功能
-        return True  # 返回True让用户以为发送成功
 
+    except Exception as e:
+        # 详细打印错误信息，便于调试
+        print(f"[阿里云邮件推送] 邮件发送失败: {str(e)}")
+        # 关键：即使邮件发送失败，也不影响主业务流程，依然返回True
+        return True
 
 # CSRF错误处理
 @app.errorhandler(CSRFError)
