@@ -57,8 +57,6 @@ class Config:
                 parsed.fragment
             ))
 
-
-
             SQLALCHEMY_DATABASE_URI = database_url
 
             # 设置引擎选项
@@ -96,6 +94,12 @@ class Config:
     # SQLAlchemy 配置
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # ====== 国际化配置 ======
+    # Babel 配置
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_SUPPORTED_LOCALES = ['zh', 'en', 'fr', 'ja']
+    BABEL_TRANSLATION_DIRECTORIES = os.path.join(basedir, 'translations')  # 翻译文件目录
+
     # ====== 阿里云邮件推送 (DirectMail) 配置 ======
     # 请确保以下敏感信息通过环境变量设置，不要硬编码！
     ALIYUN_ACCESS_KEY_ID = os.environ.get('ALIYUN_ACCESS_KEY_ID')
@@ -108,11 +112,3 @@ class Config:
     ALIYUN_FROM_ALIAS = os.environ.get('ALIYUN_FROM_ALIAS', 'Unichip客户系统')
     # 邮件标签（可选，用于分类统计）
     ALIYUN_TAG_NAME = 'website_contact'
-
-    # # 邮件配置
-    # MAIL_SERVER = 'smtp.qiye.aliyun.com'
-    # MAIL_PORT = 587
-    # MAIL_USE_TLS = True
-    # MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'postmaster@unichip.hk'
-    # MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'unichip@233'
-    # MAIL_DEFAULT_SENDER = MAIL_USERNAME

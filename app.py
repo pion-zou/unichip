@@ -1,4 +1,11 @@
 import os
+import sys
+
+# 修复路径问题
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
@@ -6,42 +13,32 @@ from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from wtforms import StringField, IntegerField, TextAreaField, PasswordField, EmailField, FloatField
 from wtforms.validators import DataRequired, Email, NumberRange
-
-# 在 app.py 的配置部分简化处理
+from flask_babel import Babel, gettext as _
 
 app = Flask(__name__)
 
-# 尝试从config.py导入配置，如果失败则使用默认配置
-try:
-    app.config.from_object('config.Config')
-    print("配置: 已加载 config.py 配置")
+# 设置基本配置
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 
-    # 打印数据库类型用于调试
-    db_uri = app.config.get('SQLALCHEMY_DATABASE_URI', '')
-    if 'postgresql+pg8000://' in db_uri:
-        print("配置: 使用 PostgreSQL + pg8000 (Neon)")
-    elif 'sqlite:///' in db_uri:
-        print("配置: 使用本地 SQLite")
-    else:
-        print("配置: 未配置数据库")
+
+# 尝试从 config.py 导入更多配置
+try:
+    from config import Config
+
+    app.config.from_object(Config)
+    print("配置: 已加载 config.py 配置")
 
 except ImportError as e:
     print(f"警告: 未找到config.py，错误: {e}")
     print("警告: 使用硬编码默认配置")
 
-    # 默认配置（仅在找不到config.py时使用）
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
-
-    # 尝试从环境变量获取数据库连接
+    # 数据库配置
     database_url = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL')
-
     if database_url:
         print(f"从环境变量获取数据库URL: {database_url[:50]}...")
-
         # 移除 sslmode 参数
         if 'sslmode=require' in database_url:
             database_url = database_url.replace('sslmode=require', '')
-            # 清理多余的 ? 或 &
             database_url = database_url.replace('??', '?').rstrip('?')
             print("已移除 sslmode=require 参数")
 
@@ -52,32 +49,42 @@ except ImportError as e:
             database_url = database_url.replace('postgres://', 'postgresql+pg8000://', 1)
 
         app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-
-        # 简单的引擎选项，不传递 ssl 参数
         app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
             'pool_recycle': 300,
             'pool_pre_ping': True,
-            'connect_args': {
-                'timeout': 10,
-            }
+            'connect_args': {'timeout': 10}
         }
-
         print("配置: 使用环境变量中的 PostgreSQL 数据库")
     else:
         print("警告: 未找到数据库连接字符串，使用本地 SQLite")
-        # 本地开发时使用 SQLite
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/local.db'
         app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {}
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # 邮件配置（可选）
+    # 邮件配置
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME', '')
     app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD', '')
     app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', '')
+
+# 初始化 Babel - Flask-Babel 4.0.0 的正确方式
+babel = Babel(app)
+
+
+@babel.localeselector
+def get_locale():
+    # 1. 从 session 获取
+    if 'language' in session and session['language'] in app.config['BABEL_SUPPORTED_LOCALES']:
+        return session['language']
+    # 2. 从 URL 参数获取
+    lang = request.args.get('lang')
+    if lang in app.config['BABEL_SUPPORTED_LOCALES']:
+        return lang
+    # 3. 从浏览器请求头获取
+    return request.accept_languages.best_match(app.config['BABEL_SUPPORTED_LOCALES']) or 'en'
 
 # 初始化扩展
 csrf = CSRFProtect(app)
@@ -273,7 +280,7 @@ def handle_csrf_error(e):
 def index():
     search_form = SearchForm()
     contact_form = ContactForm()
-    return render_template('index.html', search_form=search_form, contact_form=contact_form)
+    return render_template('index.html', search_form=search_form, contact_form=contact_form,get_locale=get_locale)
 
 
 @app.route('/search', methods=['POST'])
@@ -528,8 +535,12 @@ def health():
     return jsonify({'status': 'ok', 'message': '应用运行正常'})
 
 
-# 删除这行，它是不必要的
-# app = app
+@app.route('/set_language/<lang>')
+def set_language(lang):
+    supported_locales = app.config.get('BABEL_SUPPORTED_LOCALES', ['zh', 'en'])
+    if lang in supported_locales:
+        session['language'] = lang
+    return redirect(request.referrer or url_for('index'))
 
 if __name__ == '__main__':
     # 本地开发时运行

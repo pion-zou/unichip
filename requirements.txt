@@ -6,3 +6,5 @@ email-validator==2.0.0
 python-dotenv==1.0.0
 alibabacloud-tea-openapi==0.4.2
 alibabacloud-dm20151123==1.7.2
+Flask-Babel==2.0.0  # Flask-Babel 与 Babel 2.17.0 兼容版本
+Babel==2.17.0

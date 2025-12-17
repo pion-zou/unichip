@@ -1,45 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AllChip 电子芯片库存查询</title>
+    <title>{{ _('UniChip 电子芯片库存查询') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 1.5rem;
-        }
-        .card-header {
-            font-size: 1.25rem;
-            font-weight: bold;
-        }
-        .chip-details {
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-        .stock-badge {
-            font-size: 0.9rem;
-            padding: 5px 10px;
-        }
-        footer {
-            margin-top: 50px;
-            padding: 20px 0;
-            background-color: #343a40;
-        }
+        body { background-color: #f8f9fa; }
+        .navbar-brand { font-weight: bold; font-size: 1.5rem; }
+        .card-header { font-size: 1.25rem; font-weight: bold; }
+        .chip-details { background-color: #f8f9fa; border-radius: 5px; padding: 15px; margin-top: 15px; }
+        .stock-badge { font-size: 0.9rem; padding: 5px 10px; }
+        footer { margin-top: 50px; padding: 20px 0; background-color: #343a40; }
     </style>
 </head>
+
 <body>
     <!-- 导航栏 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="fas fa-microchip"></i> AllChip 电子芯片
+                <i class="fas fa-microchip"></i> {{ _('UniChip 电子芯片') }}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -48,32 +30,53 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="#search">
-                            <i class="fas fa-search"></i> 查询库存
+                            <i class="fas fa-search"></i> {{ _('查询库存') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">
-                            <i class="fas fa-envelope"></i> 联系我们
+                            <i class="fas fa-envelope"></i> {{ _('联系我们') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/login">
-                            <i class="fas fa-user-cog"></i> 管理员
+                            <i class="fas fa-user-cog"></i> {{ _('管理员') }}
                         </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown">
+                            {{ _('语言') }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='en') }}">English</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='fr') }}">Français</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='ja') }}">日本語</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='zh') }}">中文</a></li>
+                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
+    <!-- 调试信息 -->
+<!--    <div class="container mt-2">-->
+<!--        <div class="alert alert-info">-->
+<!--            <p>{{ _('调试信息') }}:</p>-->
+<!--            <p>{{ _('Session语言') }}: {{ session.get('language', _('未设置')) }}</p>-->
+<!--            <p>{{ _('Babel语言') }}: {{ get_locale() }}</p>-->
+<!--            <p>{{ _('翻译测试') }}: {{ _('电子芯片库存查询系统') }}</p>-->
+<!--        </div>-->
+<!--    </div>-->
+
     <!-- 主要内容 -->
     <div class="container mt-5">
         <!-- 标题 -->
         <div class="text-center mb-5">
             <h1 class="display-4 text-primary">
-                <i class="fas fa-warehouse"></i> 电子芯片库存查询系统
+                <i class="fas fa-warehouse"></i> {{ _('电子芯片库存查询系统') }}
             </h1>
-            <p class="lead text-muted">快速查询芯片库存信息，获取实时报价</p>
+            <p class="lead text-muted">{{ _('快速查询芯片库存信息，获取实时报价') }}</p>
         </div>
 
         <!-- 搜索部分 -->
@@ -81,46 +84,43 @@
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
                     <h2 class="mb-0">
-                        <i class="fas fa-search"></i> 芯片库存查询
+                        <i class="fas fa-search"></i> {{ _('芯片库存查询') }}
                     </h2>
                 </div>
                 <div class="card-body">
                     <!-- CSRF令牌隐藏字段 -->
                     <input type="hidden" id="csrf_token" value="{{ csrf_token() }}">
-                    
+
                     <form id="searchForm">
                         <div class="mb-4">
                             <label for="model" class="form-label fs-5">
-                                <i class="fas fa-microchip"></i> 请输入芯片型号
+                                <i class="fas fa-microchip"></i> {{ _('请输入芯片型号') }}
                             </label>
                             <div class="input-group">
-                                <input type="text" class="form-control form-control-lg" 
-                                       id="model" name="model" required
-                                       placeholder="例如: STM32F103C8T6" autofocus>
+                                <input type="text" class="form-control form-control-lg" id="model" name="model" required
+                                       placeholder="{{ _('例如: STM32F103C8T6') }}" autofocus>
                                 <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-search"></i> 查询
+                                    <i class="fas fa-search"></i> {{ _('查询') }}
                                 </button>
                             </div>
                             <div class="form-text mt-2">
-                                提示：支持模糊查询，输入部分型号即可查找
+                                {{ _('提示：支持模糊查询，输入部分型号即可查找') }}
                             </div>
                         </div>
                     </form>
 
                     <!-- 查询结果区域 -->
                     <div id="searchResult" class="mt-4" style="display: none;">
-                        <h3 class="border-bottom pb-2">查询结果</h3>
-                        
+                        <h3 class="border-bottom pb-2">{{ _('查询结果') }}</h3>
+
                         <!-- 成功消息 -->
-                        <div class="alert alert-success alert-dismissible fade show" 
-                             id="resultSuccess" role="alert" style="display: none;">
+                        <div class="alert alert-success alert-dismissible fade show" id="resultSuccess" role="alert" style="display: none;">
                             <div id="successMessage"></div>
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
-                        
+
                         <!-- 错误消息 -->
-                        <div class="alert alert-danger alert-dismissible fade show" 
-                             id="resultError" role="alert" style="display: none;">
+                        <div class="alert alert-danger alert-dismissible fade show" id="resultError" role="alert" style="display: none;">
                             <div id="errorMessage"></div>
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                         </div>
@@ -129,26 +129,26 @@
                         <div id="chipDetails" class="chip-details" style="display: none;">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <h4>芯片信息</h4>
+                                    <h4>{{ _('芯片信息') }}</h4>
                                     <table class="table">
                                         <tbody>
                                             <tr>
-                                                <th width="100">型号：</th>
+                                                <th width="100">{{ _('型号：') }}</th>
                                                 <td><span id="chipModel" class="fw-bold text-primary">-</span></td>
                                             </tr>
                                             <tr>
-                                                <th>描述：</th>
+                                                <th>{{ _('描述：') }}</th>
                                                 <td><span id="chipDescription">-</span></td>
                                             </tr>
                                             <tr>
-                                                <th>库存：</th>
+                                                <th>{{ _('库存：') }}</th>
                                                 <td>
                                                     <span id="chipStock" class="fw-bold">-</span>
                                                     <span id="stockStatus" class="ms-2"></span>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <th>价格：</th>
+                                                <th>{{ _('价格：') }}</th>
                                                 <td><span id="chipPrice" class="fw-bold text-success">-</span></td>
                                             </tr>
                                         </tbody>
@@ -158,21 +158,21 @@
                                     <div class="card bg-light">
                                         <div class="card-header bg-info text-white">
                                             <h5 class="mb-0">
-                                                <i class="fas fa-info-circle"></i> 库存说明
+                                                <i class="fas fa-info-circle"></i> {{ _('库存说明') }}
                                             </h5>
                                         </div>
                                         <div class="card-body">
                                             <p>
-                                                <span class="badge bg-success stock-badge">充足</span> 
-                                                库存 > 10
+                                                <span class="badge bg-success stock-badge">{{ _('充足') }}</span>
+                                                {{ _('库存 > 10') }}
                                             </p>
                                             <p>
-                                                <span class="badge bg-warning text-dark stock-badge">少量</span>
-                                                0 < 库存 ≤ 10
+                                                <span class="badge bg-warning text-dark stock-badge">{{ _('少量') }}</span>
+                                                {{ _('0 < 库存 ≤ 10') }}
                                             </p>
                                             <p>
-                                                <span class="badge bg-danger stock-badge">缺货</span>
-                                                库存 = 0
+                                                <span class="badge bg-danger stock-badge">{{ _('缺货') }}</span>
+                                                {{ _('库存 = 0') }}
                                             </p>
                                         </div>
                                     </div>
@@ -180,7 +180,7 @@
                             </div>
                             <div class="mt-4 text-center">
                                 <button id="inquireBtn" class="btn btn-info btn-lg">
-                                    <i class="fas fa-envelope"></i> 需要更多？立即咨询
+                                    <i class="fas fa-envelope"></i> {{ _('需要更多？立即咨询') }}
                                 </button>
                             </div>
                         </div>
@@ -194,24 +194,24 @@
             <div class="card shadow">
                 <div class="card-header bg-success text-white">
                     <h2 class="mb-0">
-                        <i class="fas fa-envelope"></i> 联系我们
+                        <i class="fas fa-envelope"></i> {{ _('联系我们') }}
                     </h2>
                 </div>
                 <div class="card-body">
                     <form id="contactForm">
                         <!-- CSRF令牌 -->
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        
+
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="company" class="form-label">
-                                    <i class="fas fa-building"></i> 公司名
+                                    <i class="fas fa-building"></i> {{ _('公司名') }}
                                 </label>
                                 <input type="text" class="form-control" id="company" name="company" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="name" class="form-label">
-                                    <i class="fas fa-user"></i> 姓名
+                                    <i class="fas fa-user"></i> {{ _('姓名') }}
                                 </label>
                                 <input type="text" class="form-control" id="name" name="name" required>
                             </div>
@@ -219,39 +219,39 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="email" class="form-label">
-                                    <i class="fas fa-envelope"></i> 邮箱
+                                    <i class="fas fa-envelope"></i> {{ _('邮箱') }}
                                 </label>
                                 <input type="email" class="form-control" id="email" name="email" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="phone" class="form-label">
-                                    <i class="fas fa-phone"></i> 电话
+                                    <i class="fas fa-phone"></i> {{ _('电话') }}
                                 </label>
                                 <input type="tel" class="form-control" id="phone" name="phone" required>
                             </div>
                         </div>
                         <div class="mb-4">
                             <label for="message" class="form-label">
-                                <i class="fas fa-comment"></i> 留言
+                                <i class="fas fa-comment"></i> {{ _('留言') }}
                             </label>
-                            <textarea class="form-control" id="message" name="message" rows="4" 
-                                      placeholder="例如：我需要1000个该型号芯片，请提供报价和交货时间"></textarea>
+                            <textarea class="form-control" id="message" name="message" rows="4"
+                                      placeholder="{{ _('例如：我需要1000个该型号芯片，请提供报价和交货时间') }}"></textarea>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-success btn-lg">
-                                <i class="fas fa-paper-plane"></i> 提交信息
+                                <i class="fas fa-paper-plane"></i> {{ _('提交信息') }}
                             </button>
                         </div>
                     </form>
-                    
+
                     <!-- 联系结果消息 -->
                     <div id="contactResult" class="mt-3" style="display: none;"></div>
-                    
+
                     <div class="mt-4 p-3 bg-light rounded">
-                        <h5><i class="fas fa-info-circle"></i> 重要提示</h5>
+                        <h5><i class="fas fa-info-circle"></i> {{ _('重要提示') }}</h5>
                         <p class="mb-0">
-                            提交后，您的信息将被发送到管理员邮箱，我们会在1-2个工作日内与您联系。
-                            如有紧急需求，请直接拨打我们的服务电话。
+                            {{ _('提交后，您的信息将被发送到管理员邮箱，我们会在1-2个工作日内与您联系。') }}
+                            {{ _('如有紧急需求，请直接拨打我们的服务电话。') }}
                         </p>
                     </div>
                 </div>
@@ -264,21 +264,21 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>AllChip 电子芯片</h5>
-                    <p>专业的电子元器件供应商</p>
-                    <p>提供各类芯片库存查询和采购服务</p>
+                    <h5>{{ _('UniChip 电子芯片') }}</h5>
+                    <p>{{ _('专业的电子元器件供应商') }}</p>
+                    <p>{{ _('提供各类芯片库存查询和采购服务') }}</p>
                 </div>
                 <div class="col-md-6 text-end">
-                    <h5>联系我们</h5>
-                    <p>邮箱: support@allchip.com</p>
-                    <p>电话: 400-123-4567</p>
+                    <h5>{{ _('联系我们') }}</h5>
+                    <p>{{ _('邮箱') }}: support@UniChip.com</p>
+                    <p>{{ _('电话') }}: 400-123-4567</p>
                 </div>
             </div>
             <hr class="bg-light">
             <div class="text-center">
-                <p class="mb-0">&copy; 2023 AllChip 电子芯片库存查询系统. 保留所有权利.</p>
+                <p class="mb-0">&copy; 2023 {{ _('UniChip 电子芯片库存查询系统. 保留所有权利.') }}</p>
                 <p class="mt-2">
-                    <a href="/admin/login" class="text-white-50">管理员登录</a>
+                    <a href="/admin/login" class="text-white-50">{{ _('管理员登录') }}</a>
                 </p>
             </div>
         </div>
@@ -287,7 +287,26 @@
     <!-- 脚本 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- 传递翻译数据到JavaScript -->
+    <div id="translations" style="display:none;"
+         data-querying="{{ _('查询中...') }}"
+         data-query-success="{{ _('查询成功！') }}"
+         data-query-failed="{{ _('查询失败，请重试') }}"
+         data-enter-model="{{ _('请输入芯片型号') }}"
+         data-chip-not-found="{{ _('未找到芯片') }}"
+         data-sufficient="{{ _('充足') }}"
+         data-low="{{ _('少量') }}"
+         data-out-of-stock="{{ _('缺货') }}"
+         data-negotiable="{{ _('价格面议') }}"
+         data-submit-failed="{{ _('提交失败，请重试') }}"
+         data-submit-success="{{ _('信息已提交，我们会尽快联系您') }}">
+    </div>
+
     <script>
+        // 获取翻译
+        const trans = document.getElementById('translations').dataset;
+
         // 获取CSRF令牌
         function getCSRFToken() {
             const csrfInput = document.getElementById('csrf_token');
@@ -301,124 +320,126 @@
         // 搜索功能
         document.getElementById('searchForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const modelInput = document.getElementById('model');
             const model = modelInput.value.trim();
-            
+
             if (!model) {
-                showMessage('error', '请输入芯片型号');
+                showMessage('error', trans.enterModel || '请输入芯片型号');
                 modelInput.focus();
                 return;
             }
-            
+
             // 显示加载状态
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 查询中...';
+            submitBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${trans.querying || '查询中...'}`;
             submitBtn.disabled = true;
-            
+
             // 发送请求
             fetch('/search', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': getCSRFToken()
-                },
-                body: `model=${encodeURIComponent(model)}&csrf_token=${getCSRFToken()}`
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => {
-                        throw new Error(err.error || '查询失败');
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    showMessage('error', data.error);
-                    document.getElementById('chipDetails').style.display = 'none';
-                } else {
-                    // 显示芯片信息
-                    document.getElementById('chipModel').textContent = data.model || 'N/A';
-                    document.getElementById('chipDescription').textContent = data.description || '无描述';
-                    document.getElementById('chipStock').textContent = data.stock || 0;
-                    
-                    // 显示库存状态
-                    const stockStatus = document.getElementById('stockStatus');
-                    const stock = data.stock || 0;
-                    if (stock > 10) {
-                        stockStatus.innerHTML = '<span class="badge bg-success">充足</span>';
-                    } else if (stock > 0) {
-                        stockStatus.innerHTML = '<span class="badge bg-warning text-dark">少量</span>';
-                    } else {
-                        stockStatus.innerHTML = '<span class="badge bg-danger">缺货</span>';
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    body: `model=${encodeURIComponent(model)}&csrf_token=${getCSRFToken()}`
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw new Error(err.error || trans.queryFailed || '查询失败');
+                        });
                     }
-                    
-                    // 显示价格
-                    const price = data.price || 0;
-                    document.getElementById('chipPrice').textContent = 
-                        price > 0 ? `¥${price.toFixed(2)}` : '价格面议';
-                    
-                    showMessage('success', '查询成功！');
-                    document.getElementById('chipDetails').style.display = 'block';
-                }
-                document.getElementById('searchResult').style.display = 'block';
-            })
-            .catch(error => {
-                showMessage('error', error.message || '查询失败，请重试');
-                console.error('Search Error:', error);
-            })
-            .finally(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            });
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        showMessage('error', data.error);
+                        document.getElementById('chipDetails').style.display = 'none';
+                    } else {
+                        // 显示芯片信息
+                        document.getElementById('chipModel').textContent = data.model || 'N/A';
+                        document.getElementById('chipDescription').textContent = data.description || '{{ _("无描述") }}';
+                        document.getElementById('chipStock').textContent = data.stock || 0;
+
+                        // 显示库存状态
+                        const stockStatus = document.getElementById('stockStatus');
+                        const stock = data.stock || 0;
+                        if (stock > 10) {
+                            stockStatus.innerHTML = `<span class="badge bg-success">${trans.sufficient || '充足'}</span>`;
+                        } else if (stock > 0) {
+                            stockStatus.innerHTML = `<span class="badge bg-warning text-dark">${trans.low || '少量'}</span>`;
+                        } else {
+                            stockStatus.innerHTML = `<span class="badge bg-danger">${trans.outOfStock || '缺货'}</span>`;
+                        }
+
+                        // 显示价格
+                        const price = data.price || 0;
+                        document.getElementById('chipPrice').textContent =
+                            price > 0 ? `¥${price.toFixed(2)}` : (trans.negotiable || '价格面议');
+
+                        showMessage('success', trans.querySuccess || '查询成功！');
+                        document.getElementById('chipDetails').style.display = 'block';
+                    }
+                    document.getElementById('searchResult').style.display = 'block';
+                })
+                .catch(error => {
+                    showMessage('error', error.message || trans.queryFailed || '查询失败，请重试');
+                    console.error('Search Error:', error);
+                })
+                .finally(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                });
         });
-        
+
         // 联系表单
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
-            
+
             fetch('/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCSRFToken()
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    showContactMessage(`提交失败: ${data.error}`, false);
-                } else {
-                    showContactMessage(data.message, true);
-                    this.reset();
-                }
-            })
-            .catch(error => {
-                showContactMessage('提交失败，请重试', false);
-                console.error('Contact Error:', error);
-            });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showContactMessage(`${trans.submitFailed || '提交失败'}: ${data.error}`, false);
+                    } else {
+                        showContactMessage(trans.submitSuccess || '信息已提交，我们会尽快联系您', true);
+                        this.reset();
+                    }
+                })
+                .catch(error => {
+                    showContactMessage(trans.submitFailed || '提交失败，请重试', false);
+                    console.error('Contact Error:', error);
+                });
         });
-        
+
         // 立即咨询按钮
         document.getElementById('inquireBtn').addEventListener('click', function() {
-            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('contact').scrollIntoView({
+                behavior: 'smooth'
+            });
             const model = document.getElementById('chipModel').textContent;
             if (model && model !== '-') {
-                document.getElementById('message').value = `我对型号 ${model} 感兴趣，请提供详细报价和交货时间。`;
+                document.getElementById('message').value = `{{ _("我对型号") }} ${model} {{ _("感兴趣，请提供详细报价和交货时间。") }}`;
             }
         });
-        
+
         // 显示消息函数
         function showMessage(type, message) {
             const successEl = document.getElementById('resultSuccess');
             const errorEl = document.getElementById('resultError');
-            
+
             if (type === 'success') {
                 successEl.style.display = 'block';
                 errorEl.style.display = 'none';
@@ -429,7 +450,7 @@
                 document.getElementById('errorMessage').textContent = message;
             }
         }
-        
+
         function showContactMessage(message, isSuccess) {
             const resultEl = document.getElementById('contactResult');
             resultEl.innerHTML = `
@@ -439,7 +460,7 @@
                 </div>
             `;
             resultEl.style.display = 'block';
-            
+
             // 3秒后自动隐藏
             setTimeout(() => {
                 resultEl.style.display = 'none';

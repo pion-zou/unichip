@@ -1,0 +1,243 @@
+# Translations template for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-12-17 11:33+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: templates/index.html:68 templates/index.html:77 test_translation_load.py:43
+msgid "电子芯片库存查询系统"
+msgstr ""
+
+#: templates/index.html:7
+msgid "UniChip 电子芯片库存查询"
+msgstr ""
+
+#: templates/index.html:24 templates/index.html:267
+msgid "UniChip 电子芯片"
+msgstr ""
+
+#: templates/index.html:33
+msgid "查询库存"
+msgstr ""
+
+#: templates/index.html:38 templates/index.html:197 templates/index.html:272
+msgid "联系我们"
+msgstr ""
+
+#: templates/index.html:43
+msgid "管理员"
+msgstr ""
+
+#: templates/index.html:48
+msgid "语言"
+msgstr ""
+
+#: templates/index.html:65
+msgid "调试信息"
+msgstr ""
+
+#: templates/index.html:66
+msgid "Session语言"
+msgstr ""
+
+#: templates/index.html:66
+msgid "未设置"
+msgstr ""
+
+#: templates/index.html:67
+msgid "Babel语言"
+msgstr ""
+
+#: templates/index.html:68
+msgid "翻译测试"
+msgstr ""
+
+#: templates/index.html:79
+msgid "快速查询芯片库存信息，获取实时报价"
+msgstr ""
+
+#: templates/index.html:87
+msgid "芯片库存查询"
+msgstr ""
+
+#: templates/index.html:97 templates/index.html:296
+msgid "请输入芯片型号"
+msgstr ""
+
+#: templates/index.html:101
+msgid "例如: STM32F103C8T6"
+msgstr ""
+
+#: templates/index.html:103
+msgid "查询"
+msgstr ""
+
+#: templates/index.html:107
+msgid "提示：支持模糊查询，输入部分型号即可查找"
+msgstr ""
+
+#: templates/index.html:114
+msgid "查询结果"
+msgstr ""
+
+#: templates/index.html:132
+msgid "芯片信息"
+msgstr ""
+
+#: templates/index.html:136
+msgid "型号："
+msgstr ""
+
+#: templates/index.html:140
+msgid "描述："
+msgstr ""
+
+#: templates/index.html:144
+msgid "库存："
+msgstr ""
+
+#: templates/index.html:151
+msgid "价格："
+msgstr ""
+
+#: templates/index.html:161
+msgid "库存说明"
+msgstr ""
+
+#: templates/index.html:166 templates/index.html:298
+msgid "充足"
+msgstr ""
+
+#: templates/index.html:167
+msgid "库存 > 10"
+msgstr ""
+
+#: templates/index.html:170 templates/index.html:299
+msgid "少量"
+msgstr ""
+
+#: templates/index.html:171
+msgid "0 < 库存 ≤ 10"
+msgstr ""
+
+#: templates/index.html:174 templates/index.html:300
+msgid "缺货"
+msgstr ""
+
+#: templates/index.html:175
+msgid "库存 = 0"
+msgstr ""
+
+#: templates/index.html:183
+msgid "需要更多？立即咨询"
+msgstr ""
+
+#: templates/index.html:208
+msgid "公司名"
+msgstr ""
+
+#: templates/index.html:214
+msgid "姓名"
+msgstr ""
+
+#: templates/index.html:222 templates/index.html:273
+msgid "邮箱"
+msgstr ""
+
+#: templates/index.html:228 templates/index.html:274
+msgid "电话"
+msgstr ""
+
+#: templates/index.html:235
+msgid "留言"
+msgstr ""
+
+#: templates/index.html:238
+msgid "例如：我需要1000个该型号芯片，请提供报价和交货时间"
+msgstr ""
+
+#: templates/index.html:242
+msgid "提交信息"
+msgstr ""
+
+#: templates/index.html:251
+msgid "重要提示"
+msgstr ""
+
+#: templates/index.html:253
+msgid "提交后，您的信息将被发送到管理员邮箱，我们会在1-2个工作日内与您联系。"
+msgstr ""
+
+#: templates/index.html:254
+msgid "如有紧急需求，请直接拨打我们的服务电话。"
+msgstr ""
+
+#: templates/index.html:268
+msgid "专业的电子元器件供应商"
+msgstr ""
+
+#: templates/index.html:269
+msgid "提供各类芯片库存查询和采购服务"
+msgstr ""
+
+#: templates/index.html:279
+msgid "UniChip 电子芯片库存查询系统. 保留所有权利."
+msgstr ""
+
+#: templates/index.html:281 templates/login.html:17
+msgid "管理员登录"
+msgstr ""
+
+#: templates/index.html:293
+msgid "查询中..."
+msgstr ""
+
+#: templates/index.html:294
+msgid "查询成功！"
+msgstr ""
+
+#: templates/index.html:295
+msgid "查询失败，请重试"
+msgstr ""
+
+#: templates/index.html:297
+msgid "未找到芯片"
+msgstr ""
+
+#: templates/index.html:301
+msgid "价格面议"
+msgstr ""
+
+#: templates/index.html:302
+msgid "提交失败，请重试"
+msgstr ""
+
+#: templates/index.html:303
+msgid "信息已提交，我们会尽快联系您"
+msgstr ""
+
+#: templates/index.html:363
+msgid "无描述"
+msgstr ""
+
+#: templates/index.html:434
+msgid "我对型号"
+msgstr ""
+
+#: templates/index.html:434
+msgid "感兴趣，请提供详细报价和交货时间。"
+msgstr ""
+

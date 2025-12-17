@@ -1,0 +1,239 @@
+# English translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-12-16 18:00+0800\n"
+"PO-Revision-Date: 2025-12-17 09:57+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: templates/index.html
+msgid "0 < 库存 ≤ 10"
+msgstr "0 < Stock ≤ 10"
+
+#: templates/index.html
+msgid "Babel语言"
+msgstr "Babel Language"
+
+#: templates/index.html
+msgid "Session语言"
+msgstr "Session Language"
+
+#: templates/index.html
+msgid "UniChip 电子芯片"
+msgstr "UniChip Electronic Chips"
+
+#: templates/index.html
+msgid "UniChip 电子芯片库存查询"
+msgstr "UniChip Electronic Chip Inventory Query"
+
+#: templates/index.html
+msgid "UniChip 电子芯片库存查询系统. 保留所有权利."
+msgstr "UniChip Electronic Chip Inventory Query System. All rights reserved."
+
+#: templates/index.html
+msgid "专业的电子元器件供应商"
+msgstr "Professional Electronic Component Supplier"
+
+#: templates/index.html
+msgid "价格面议"
+msgstr "Price Negotiable"
+
+#: templates/index.html
+msgid "价格："
+msgstr "Price:"
+
+#: templates/index.html
+msgid "例如: STM32F103C8T6"
+msgstr "e.g.: STM32F103C8T6"
+
+#: templates/index.html
+msgid "例如：我需要1000个该型号芯片，请提供报价和交货时间"
+msgstr "e.g.: I need 1000 units of this model, please provide quotation and delivery time"
+
+#: templates/index.html
+msgid "信息已提交，我们会尽快联系您"
+msgstr "Information submitted, we will contact you as soon as possible"
+
+#: templates/index.html
+msgid "充足"
+msgstr "Sufficient"
+
+#: templates/index.html
+msgid "公司名"
+msgstr "Company Name"
+
+#: templates/index.html
+msgid "型号："
+msgstr "Model:"
+
+#: templates/index.html
+msgid "如有紧急需求，请直接拨打我们的服务电话。"
+msgstr "For urgent needs, please call our service number directly."
+
+#: templates/index.html
+msgid "姓名"
+msgstr "Name"
+
+#: templates/index.html
+msgid "少量"
+msgstr "Low Stock"
+
+#: templates/index.html
+msgid "库存 = 0"
+msgstr "Stock = 0"
+
+#: templates/index.html
+msgid "库存 > 10"
+msgstr "Stock > 10"
+
+#: templates/index.html
+msgid "库存说明"
+msgstr "Stock Information"
+
+#: templates/index.html
+msgid "库存："
+msgstr "Stock:"
+
+#: templates/index.html
+msgid "快速查询芯片库存信息，获取实时报价"
+msgstr "Quickly query chip inventory information and get real-time quotes"
+
+#: templates/index.html
+msgid "感兴趣，请提供详细报价和交货时间。"
+msgstr "interested, please provide detailed quotation and delivery time."
+
+#: templates/index.html
+msgid "我对型号"
+msgstr "I am interested in model"
+
+#: templates/index.html
+msgid "描述："
+msgstr "Description:"
+
+#: templates/index.html
+msgid "提交信息"
+msgstr "Submit Information"
+
+#: templates/index.html
+msgid "提交后，您的信息将被发送到管理员邮箱，我们会在1-2个工作日内与您联系。"
+msgstr "After submission, your information will be sent to the administrator's email, and we will contact you within 1-2 business days."
+
+#: templates/index.html
+msgid "提交失败，请重试"
+msgstr "Submission failed, please try again"
+
+#: templates/index.html
+msgid "提供各类芯片库存查询和采购服务"
+msgstr "Provides various chip inventory query and procurement services"
+
+#: templates/index.html
+msgid "提示：支持模糊查询，输入部分型号即可查找"
+msgstr "Tip: Supports fuzzy search, enter part of the model number"
+
+#: templates/index.html
+msgid "无描述"
+msgstr "No description"
+
+#: templates/index.html
+msgid "未找到芯片"
+msgstr "Chip not found"
+
+#: templates/index.html
+msgid "查询"
+msgstr "Search"
+
+#: templates/index.html
+msgid "查询中..."
+msgstr "Searching..."
+
+#: templates/index.html
+msgid "查询失败，请重试"
+msgstr "Search failed, please try again"
+
+#: templates/index.html
+msgid "查询库存"
+msgstr "Inventory Query"
+
+#: templates/index.html
+msgid "查询成功！"
+msgstr "Search successful!"
+
+#: templates/index.html
+msgid "查询结果"
+msgstr "Search Results"
+
+#: templates/index.html
+msgid "电子芯片库存查询系统"
+msgstr "Electronic Chip Inventory Query System"
+
+#: templates/index.html
+msgid "电话"
+msgstr "Phone"
+
+#: templates/index.html
+msgid "留言"
+msgstr "Message"
+
+#: templates/index.html
+msgid "管理员"
+msgstr "Administrator"
+
+#: templates/index.html
+msgid "管理员登录"
+msgstr "Admin Login"
+
+#: templates/index.html
+msgid "缺货"
+msgstr "Out of Stock"
+
+#: templates/index.html
+msgid "翻译测试"
+msgstr "Translation Test"
+
+#: templates/index.html
+msgid "联系我们"
+msgstr "Contact Us"
+
+#: templates/index.html
+msgid "芯片信息"
+msgstr "Chip Information"
+
+#: templates/index.html
+msgid "芯片库存查询"
+msgstr "Chip Inventory Query"
+
+#: templates/index.html
+msgid "语言"
+msgstr "Language"
+
+#: templates/index.html
+msgid "请输入芯片型号"
+msgstr "Please enter chip model"
+
+#: templates/index.html
+msgid "调试信息"
+msgstr "Debug Information"
+
+#: templates/index.html
+msgid "邮箱"
+msgstr "Email"
+
+#: templates/index.html
+msgid "重要提示"
+msgstr "Important Notice"
+
+#: templates/index.html
+msgid "需要更多？立即咨询"
+msgstr "Need more? Contact us now"

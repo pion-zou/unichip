@@ -11,3 +11,5 @@ env/
 *.sqlite3
 *.db
 .DS_Store
+test_db.py
+test_babel_extract.py

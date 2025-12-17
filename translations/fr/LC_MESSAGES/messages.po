@@ -1,0 +1,239 @@
+# French translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-12-16 18:00+0800\n"
+"PO-Revision-Date: 2025-12-17 09:57+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: templates/index.html
+msgid "0 < 库存 ≤ 10"
+msgstr "0 < Stock ≤ 10"
+
+#: templates/index.html
+msgid "Babel语言"
+msgstr "Langue Babel"
+
+#: templates/index.html
+msgid "Session语言"
+msgstr "Langue de Session"
+
+#: templates/index.html
+msgid "UniChip 电子芯片"
+msgstr "Puces Électroniques UniChip"
+
+#: templates/index.html
+msgid "UniChip 电子芯片库存查询"
+msgstr "Requête d'Inventaire de Puce Électronique UniChip"
+
+#: templates/index.html
+msgid "UniChip 电子芯片库存查询系统. 保留所有权利."
+msgstr "Système de Requête d'Inventaire de Puce Électronique UniChip. Tous droits réservés."
+
+#: templates/index.html
+msgid "专业的电子元器件供应商"
+msgstr "Fournisseur Professionnel de Composants Électroniques"
+
+#: templates/index.html
+msgid "价格面议"
+msgstr "Prix à Négocier"
+
+#: templates/index.html
+msgid "价格："
+msgstr "Prix :"
+
+#: templates/index.html
+msgid "例如: STM32F103C8T6"
+msgstr "ex.: STM32F103C8T6"
+
+#: templates/index.html
+msgid "例如：我需要1000个该型号芯片，请提供报价和交货时间"
+msgstr "ex.: J'ai besoin de 1000 unités de ce modèle, veuillez fournir un devis et un délai de livraison"
+
+#: templates/index.html
+msgid "信息已提交，我们会尽快联系您"
+msgstr "Information soumise, nous vous contacterons dès que possible"
+
+#: templates/index.html
+msgid "充足"
+msgstr "Suffisant"
+
+#: templates/index.html
+msgid "公司名"
+msgstr "Nom de la Société"
+
+#: templates/index.html
+msgid "型号："
+msgstr "Modèle :"
+
+#: templates/index.html
+msgid "如有紧急需求，请直接拨打我们的服务电话。"
+msgstr "Pour des besoins urgents, veuillez appeler directement notre numéro de service."
+
+#: templates/index.html
+msgid "姓名"
+msgstr "Nom"
+
+#: templates/index.html
+msgid "少量"
+msgstr "Stock Faible"
+
+#: templates/index.html
+msgid "库存 = 0"
+msgstr "Stock = 0"
+
+#: templates/index.html
+msgid "库存 > 10"
+msgstr "Stock > 10"
+
+#: templates/index.html
+msgid "库存说明"
+msgstr "Information sur le Stock"
+
+#: templates/index.html
+msgid "库存："
+msgstr "Stock :"
+
+#: templates/index.html
+msgid "快速查询芯片库存信息，获取实时报价"
+msgstr "Recherche rapide d'informations sur l'inventaire des puces et obtention de devis en temps réel"
+
+#: templates/index.html
+msgid "感兴趣，请提供详细报价和交货时间。"
+msgstr "intéressé, veuillez fournir un devis détaillé et un délai de livraison."
+
+#: templates/index.html
+msgid "我对型号"
+msgstr "Je suis intéressé par le modèle"
+
+#: templates/index.html
+msgid "描述："
+msgstr "Description :"
+
+#: templates/index.html
+msgid "提交信息"
+msgstr "Soumettre les Informations"
+
+#: templates/index.html
+msgid "提交后，您的信息将被发送到管理员邮箱，我们会在1-2个工作日内与您联系。"
+msgstr "Après soumission, vos informations seront envoyées à l'e-mail de l'administrateur, et nous vous contacterons dans 1 à 2 jours ouvrables."
+
+#: templates/index.html
+msgid "提交失败，请重试"
+msgstr "Échec de la soumission, veuillez réessayer"
+
+#: templates/index.html
+msgid "提供各类芯片库存查询和采购服务"
+msgstr "Fournit divers services de requête d'inventaire de puces et d'approvisionnement"
+
+#: templates/index.html
+msgid "提示：支持模糊查询，输入部分型号即可查找"
+msgstr "Astuce : Prend en charge la recherche floue, entrez une partie du numéro de modèle pour rechercher"
+
+#: templates/index.html
+msgid "无描述"
+msgstr "Pas de description"
+
+#: templates/index.html
+msgid "未找到芯片"
+msgstr "Puce non trouvée"
+
+#: templates/index.html
+msgid "查询"
+msgstr "Rechercher"
+
+#: templates/index.html
+msgid "查询中..."
+msgstr "Recherche en cours..."
+
+#: templates/index.html
+msgid "查询失败，请重试"
+msgstr "Échec de la recherche, veuillez réessayer"
+
+#: templates/index.html
+msgid "查询库存"
+msgstr "Requête d'Inventaire"
+
+#: templates/index.html
+msgid "查询成功！"
+msgstr "Recherche réussie !"
+
+#: templates/index.html
+msgid "查询结果"
+msgstr "Résultats de la Recherche"
+
+#: templates/index.html
+msgid "电子芯片库存查询系统"
+msgstr "Système de Requête d'Inventaire de Puce Électronique"
+
+#: templates/index.html
+msgid "电话"
+msgstr "Téléphone"
+
+#: templates/index.html
+msgid "留言"
+msgstr "Message"
+
+#: templates/index.html
+msgid "管理员"
+msgstr "Administrateur"
+
+#: templates/index.html
+msgid "管理员登录"
+msgstr "Connexion Administrateur"
+
+#: templates/index.html
+msgid "缺货"
+msgstr "Rupture de Stock"
+
+#: templates/index.html
+msgid "翻译测试"
+msgstr "Test de Traduction"
+
+#: templates/index.html
+msgid "联系我们"
+msgstr "Contactez-Nous"
+
+#: templates/index.html
+msgid "芯片信息"
+msgstr "Informations sur la Puce"
+
+#: templates/index.html
+msgid "芯片库存查询"
+msgstr "Requête d'Inventaire de Puce"
+
+#: templates/index.html
+msgid "语言"
+msgstr "Langue"
+
+#: templates/index.html
+msgid "请输入芯片型号"
+msgstr "Veuillez entrer le modèle de la puce"
+
+#: templates/index.html
+msgid "调试信息"
+msgstr "Informations de Débogage"
+
+#: templates/index.html
+msgid "邮箱"
+msgstr "E-mail"
+
+#: templates/index.html
+msgid "重要提示"
+msgstr "Note Importante"
+
+#: templates/index.html
+msgid "需要更多？立即咨询"
+msgstr "Besoin de plus ? Contactez-nous maintenant"
