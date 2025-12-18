@@ -277,56 +277,375 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
-        // 邮箱设置 - 修改这里！！！
+        // ============ 抄送邮箱管理功能 ============
+
+        // 加载抄送邮箱列表
+        loadCCEmails();
+
+        // 添加抄送邮箱表单提交
+        const addCCEmailForm = document.getElementById('addCCEmailForm');
+        if (addCCEmailForm) {
+            addCCEmailForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                addCCEmail();
+            });
+        }
+
+        // 邮箱设置表单提交（批量添加抄送邮箱）
         const emailSettingsForm = document.getElementById('emailSettingsForm');
         if (emailSettingsForm) {
             emailSettingsForm.addEventListener('submit', function(e) {
                 e.preventDefault();
+                updateEmailSettings();
+            });
+        }
 
-                const email = document.getElementById('email').value.trim();
+        // 加载抄送邮箱列表
+        function loadCCEmails() {
+            fetch('/admin/email/cc', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('网络响应异常');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    console.error('加载抄送邮箱失败:', data.error);
+                    showCCMessage('加载抄送邮箱失败', false);
+                } else if (data.cc_emails) {
+                    renderCCEmailList(data.cc_emails);
+                }
+            })
+            .catch(error => {
+                console.error('加载抄送邮箱失败:', error);
+                showCCMessage('加载抄送邮箱失败，请刷新重试', false);
+            });
+        }
 
-                // 创建FormData对象而不是JSON
-                const formData = new FormData();
-                formData.append('email', email);
+        // 渲染抄送邮箱列表
+        function renderCCEmailList(ccEmails) {
+            const tableBody = document.getElementById('ccEmailTableBody');
+            if (!tableBody) return;
 
-                // 添加CSRF令牌作为表单字段（某些Flask配置可能需要这个）
-                formData.append('csrf_token', getCSRFToken());
+            if (!ccEmails || ccEmails.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">暂无抄送邮箱</td>
+                    </tr>
+                `;
+                return;
+            }
 
-                fetch('/admin/settings/email', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCSRFToken()  // 保持请求头中的CSRF
-                        // 注意：不要设置Content-Type，让浏览器自动设置multipart/form-data
-                    },
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(err => {
-                            throw err;
-                        }).catch(() => {
-                            throw {error: `服务器错误: ${response.status} ${response.statusText}`};
-                        });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        showResult('emailSettingsResult', `更新失败: ${Array.isArray(data.details) ? data.details.join(', ') : data.error}`, false, 5000);
-                    } else {
-                        showResult('emailSettingsResult', data.message, true, 5000);
-                    }
-                })
-                .catch(error => {
-                    let errorMessage = '更新失败，请重试';
-                    if (error && error.error) {
-                        errorMessage = error.error;
-                    } else if (error.message) {
-                        errorMessage = error.message;
-                    }
-                    showResult('emailSettingsResult', errorMessage, false, 5000);
-                    console.error('Email Settings Error:', error);
+            tableBody.innerHTML = ccEmails.map(cc => `
+                <tr id="cc-email-${cc.id}">
+                    <td>${cc.email}</td>
+                    <td>
+                        <span class="badge ${cc.is_active ? 'bg-success' : 'bg-secondary'}">
+                            ${cc.is_active ? '激活' : '停用'}
+                        </span>
+                    </td>
+                    <td>${cc.created_at ? new Date(cc.created_at).toLocaleDateString() : '-'}</td>
+                    <td>
+                        <button class="btn btn-sm ${cc.is_active ? 'btn-warning' : 'btn-success'} btn-toggle-cc" 
+                                data-id="${cc.id}" data-active="${cc.is_active}">
+                            ${cc.is_active ? '停用' : '激活'}
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-delete-cc" data-id="${cc.id}">
+                            删除
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            // 绑定按钮事件
+            bindCCEmailEvents();
+        }
+
+        // 绑定抄送邮箱按钮事件
+        function bindCCEmailEvents() {
+            // 切换状态按钮
+            document.querySelectorAll('.btn-toggle-cc').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const currentActive = this.getAttribute('data-active') === 'true';
+                    toggleCCEmail(id, currentActive);
                 });
+            });
+
+            // 删除按钮
+            document.querySelectorAll('.btn-delete-cc').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    if (confirm('确定要删除这个抄送邮箱吗？')) {
+                        deleteCCEmail(id);
+                    }
+                });
+            });
+        }
+
+        // 添加抄送邮箱
+        function addCCEmail() {
+            const emailInput = document.getElementById('ccEmail');
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                showCCMessage('请输入有效的邮箱地址', false);
+                return;
+            }
+
+            // 简单的邮箱格式验证
+            if (!validateEmail(email)) {
+                showCCMessage('请输入有效的邮箱格式', false);
+                return;
+            }
+
+            fetch('/admin/email/cc', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    showCCMessage(data.message, true);
+                    emailInput.value = '';
+                    loadCCEmails();
+                } else if (data.error) {
+                    showCCMessage(data.error, false);
+                }
+            })
+            .catch(error => {
+                let errorMessage = '添加失败，请重试';
+                if (error && error.error) {
+                    errorMessage = error.error;
+                }
+                showCCMessage(errorMessage, false);
+                console.error('添加抄送邮箱失败:', error);
+            });
+        }
+
+        // 切换抄送邮箱状态
+        function toggleCCEmail(id, currentStatus) {
+            fetch(`/admin/email/cc/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: JSON.stringify({ is_active: !currentStatus })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    showCCMessage(data.message, true);
+                    loadCCEmails();
+                } else if (data.error) {
+                    showCCMessage(data.error, false);
+                }
+            })
+            .catch(error => {
+                let errorMessage = '操作失败，请重试';
+                if (error && error.error) {
+                    errorMessage = error.error;
+                }
+                showCCMessage(errorMessage, false);
+                console.error('切换状态失败:', error);
+            });
+        }
+
+        // 删除抄送邮箱
+        function deleteCCEmail(id) {
+            fetch(`/admin/email/cc/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': getCSRFToken()
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.message) {
+                    showCCMessage(data.message, true);
+                    loadCCEmails();
+                } else if (data.error) {
+                    showCCMessage(data.error, false);
+                }
+            })
+            .catch(error => {
+                let errorMessage = '删除失败，请重试';
+                if (error && error.error) {
+                    errorMessage = error.error;
+                }
+                showCCMessage(errorMessage, false);
+                console.error('删除抄送邮箱失败:', error);
+            });
+        }
+
+        // 显示抄送邮箱消息
+        function showCCMessage(message, isSuccess) {
+            const messageDiv = document.getElementById('ccEmailMessage');
+            if (messageDiv) {
+                messageDiv.style.display = 'block';
+                messageDiv.className = isSuccess ? 'alert alert-success' : 'alert alert-danger';
+                messageDiv.innerHTML = message;
+
+                // 3秒后自动隐藏
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 3000);
+            } else {
+                // 如果没有消息div，使用alert
+                alert(message);
+            }
+        }
+
+        // 邮箱格式验证
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // 邮箱设置表单提交（批量添加抄送邮箱）
+        function updateEmailSettings() {
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                showResult('emailSettingsResult', '请输入邮箱地址', false, 5000);
+                return;
+            }
+
+            // 创建FormData对象
+            const formData = new FormData();
+            formData.append('email', email);
+
+            // 检查是否有批量抄送邮箱输入
+            const batchCCInput = document.getElementById('batchCCEmails');
+            if (batchCCInput && batchCCInput.value.trim()) {
+                formData.append('cc_email', batchCCInput.value.trim());
+            }
+
+            fetch('/admin/settings/email', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    showResult('emailSettingsResult', `更新失败: ${Array.isArray(data.details) ? data.details.join(', ') : data.error}`, false, 5000);
+                } else {
+                    showResult('emailSettingsResult', data.message, true, 5000);
+                    // 如果有批量添加抄送邮箱，重新加载列表
+                    if (batchCCInput && batchCCInput.value.trim()) {
+                        loadCCEmails();
+                        batchCCInput.value = '';
+                    }
+                }
+            })
+            .catch(error => {
+                let errorMessage = '更新失败，请重试';
+                if (error && error.error) {
+                    errorMessage = error.error;
+                }
+                showResult('emailSettingsResult', errorMessage, false, 5000);
+                console.error('Email Settings Error:', error);
+            });
+        }
+
+        // 邮箱设置表单提交（批量添加抄送邮箱）
+        function updateEmailSettings() {
+            const emailInput = document.getElementById('email');
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                showResult('emailSettingsResult', '请输入邮箱地址', false, 5000);
+                return;
+            }
+
+            // 创建FormData对象
+            const formData = new FormData();
+            formData.append('email', email);
+
+            // 检查是否有批量抄送邮箱输入
+            const batchCCInput = document.getElementById('batchCCEmails');
+            if (batchCCInput && batchCCInput.value.trim()) {
+                formData.append('cc_email', batchCCInput.value.trim());
+            }
+
+            fetch('/admin/settings/email', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw err;
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    showResult('emailSettingsResult', `更新失败: ${Array.isArray(data.details) ? data.details.join(', ') : data.error}`, false, 5000);
+                } else {
+                    showResult('emailSettingsResult', data.message, true, 5000);
+                    // 如果有批量添加抄送邮箱，重新加载列表
+                    if (batchCCInput && batchCCInput.value.trim()) {
+                        loadCCEmails();
+                        batchCCInput.value = '';
+                    }
+                }
+            })
+            .catch(error => {
+                let errorMessage = '更新失败，请重试';
+                if (error && error.error) {
+                    errorMessage = error.error;
+                }
+                showResult('emailSettingsResult', errorMessage, false, 5000);
+                console.error('Email Settings Error:', error);
             });
         }
     }

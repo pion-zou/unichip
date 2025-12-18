@@ -20,7 +20,6 @@ app = Flask(__name__)
 # 设置基本配置
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 
-
 # 尝试从 config.py 导入更多配置
 try:
     from config import Config
@@ -85,6 +84,7 @@ def get_locale():
         return lang
     # 3. 从浏览器请求头获取
     return request.accept_languages.best_match(app.config['BABEL_SUPPORTED_LOCALES']) or 'en'
+
 
 # 初始化扩展
 csrf = CSRFProtect(app)
@@ -155,8 +155,28 @@ class LoginForm(FlaskForm):
     password = PasswordField('密码', validators=[DataRequired()])
 
 
+class EmailCC(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(200), nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'is_active': self.is_active,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
+
 class EmailSettingForm(FlaskForm):
     email = EmailField('接收邮件的邮箱', validators=[DataRequired(), Email()])
+    cc_email = StringField('抄送邮箱（多个用逗号分隔）')
+
+
+class EmailCCForm(FlaskForm):
+    email = EmailField('抄送邮箱', validators=[DataRequired(), Email()])
 
 
 # 应用初始化
@@ -174,6 +194,18 @@ with app.app_context():
                 db.session.add(setting)
                 db.session.commit()
                 print("已创建默认邮箱设置。")
+
+            # 检查是否有示例抄送邮箱数据
+            if EmailCC.query.count() == 0:
+                # 可以添加一些示例抄送邮箱
+                sample_cc_emails = [
+                    EmailCC(email='backup1@example.com', is_active=True),
+                    EmailCC(email='backup2@example.com', is_active=True),
+                ]
+                for cc_email in sample_cc_emails:
+                    db.session.add(cc_email)
+                db.session.commit()
+                print("已添加示例抄送邮箱数据")
 
             # 添加一些示例芯片数据（如果数据库为空）
             if Chip.query.count() == 0:
@@ -205,19 +237,29 @@ def get_email_recipient():
         return app.config.get('MAIL_USERNAME', '395610992@qq.com')
 
 
+def get_email_cc_list():
+    """获取所有激活的抄送邮箱"""
+    try:
+        cc_emails = EmailCC.query.filter_by(is_active=True).all()
+        return [cc.email for cc in cc_emails]
+    except Exception:
+        return []
+
+
 # 发送联系邮件
 def send_contact_email(contact):
     """
-    使用阿里云邮件推送 API 发送联系表单邮件（针对 v0.4.2 修正版）
+    使用阿里云邮件推送 API 发送联系表单邮件，包含抄送功能
     """
     from alibabacloud_tea_openapi import models as open_api_models
     from alibabacloud_dm20151123 import client as dm_client
     from alibabacloud_dm20151123 import models as dm_models
-    # 1. 修正：从 alibabacloud_tea_util 导入 RuntimeOptions
     from alibabacloud_tea_util import models as util_models
     import json
 
     recipient = get_email_recipient()
+    cc_emails = get_email_cc_list()
+
     subject = f'芯片查询 - 来自 {contact.company} 的 {contact.name}'
     html_body = f""" 新的联系信息：<br>
 
@@ -227,47 +269,39 @@ def send_contact_email(contact):
 电话: {contact.phone}<br>
 留言: {contact.message}<br>
 提交时间: {contact.timestamp.strftime('%Y-%m-%d %H:%M:%S')}
-"""  # 这里保留您之前编写的HTML邮件正文（请勿删除或修改）
+"""
 
     try:
-        # 1. 使用新版的Config和Client初始化
         config = open_api_models.Config(
             access_key_id=app.config['ALIYUN_ACCESS_KEY_ID'],
             access_key_secret=app.config['ALIYUN_ACCESS_KEY_SECRET'],
-            # 修正：region_id 对于邮件推送服务不是必须的，但可以保留
-            # region_id=app.config.get('ALIYUN_REGION_ID', 'cn-hangzhou')
         )
         config.endpoint = 'dm.aliyuncs.com'
         client = dm_client.Client(config)
 
-        # 2. 构建新版API请求
         request = dm_models.SingleSendMailRequest()
-        request.account_name = app.config['ALIYUN_ACCOUNT_NAME']  # 发信地址
-        request.address_type = 1  # 1: 发信地址
+        request.account_name = app.config['ALIYUN_ACCOUNT_NAME']
+        request.address_type = 1
         request.reply_to_address = False
-        request.to_address = recipient
+
+        # 构建收件人列表：主收件人 + 抄送邮箱
+        to_address_list = [recipient] + cc_emails
+        request.to_address = ",".join(to_address_list)  # 用逗号分隔多个收件人
+
         request.subject = subject
         request.html_body = html_body
-        request.from_alias = app.config.get('ALIYUN_FROM_ALIAS', '')  # 发信人昵称
+        request.from_alias = app.config.get('ALIYUN_FROM_ALIAS', '')
 
-        # 3. 创建RuntimeOptions（可选，用于设置超时等）
         runtime = util_models.RuntimeOptions()
-        # 您可以在此设置运行时参数，例如：
-        # runtime.read_timeout = 10000  # 读取超时10秒
-        # runtime.connect_timeout = 5000 # 连接超时5秒
-
-        # 4. 发送请求（传入 runtime）
         response = client.single_send_mail_with_options(request, runtime)
 
-        # 5. 打印成功日志
-        print(f"[阿里云邮件推送] 邮件发送成功！RequestId: {response.body.request_id}")
+        print(f"[阿里云邮件推送] 邮件发送成功！收件人: {len(to_address_list)}个，RequestId: {response.body.request_id}")
         return True
 
     except Exception as e:
-        # 详细打印错误信息，便于调试
         print(f"[阿里云邮件推送] 邮件发送失败: {str(e)}")
-        # 关键：即使邮件发送失败，也不影响主业务流程，依然返回True
         return True
+
 
 # CSRF错误处理
 @app.errorhandler(CSRFError)
@@ -280,7 +314,7 @@ def handle_csrf_error(e):
 def index():
     search_form = SearchForm()
     contact_form = ContactForm()
-    return render_template('index.html', search_form=search_form, contact_form=contact_form,get_locale=get_locale)
+    return render_template('index.html', search_form=search_form, contact_form=contact_form, get_locale=get_locale)
 
 
 @app.route('/search', methods=['POST'])
@@ -504,23 +538,33 @@ def update_email_setting():
     form = EmailSettingForm()
     if form.validate_on_submit():
         try:
+            # 更新主收件邮箱
             setting = Setting.query.filter_by(key='email_recipient').first()
             if not setting:
                 setting = Setting(key='email_recipient', value=form.email.data)
                 db.session.add(setting)
             else:
                 setting.value = form.email.data
+
+            # 处理批量添加抄送邮箱
+            if form.cc_email.data:
+                cc_emails = [email.strip() for email in form.cc_email.data.split(',') if email.strip()]
+                for email in cc_emails:
+                    # 验证邮箱格式
+                    if '@' in email and '.' in email:
+                        # 检查是否已存在
+                        existing = EmailCC.query.filter_by(email=email).first()
+                        if not existing:
+                            cc_email = EmailCC(email=email)
+                            db.session.add(cc_email)
+
             db.session.commit()
             return jsonify({'message': '邮箱设置更新成功'})
         except Exception as e:
             print(f"更新邮箱设置错误: {e}")
             return jsonify({'error': '数据库操作失败'}), 500
     else:
-        errors = []
-        for field, errs in form.errors.items():
-            for err in errs:
-                errors.append(f"{field}: {err}")
-        return jsonify({'error': '表单验证失败', 'details': errors}), 400
+        return jsonify({'error': '表单验证失败', 'details': form.errors}), 400
 
 
 @app.route('/admin/logout')
@@ -541,6 +585,78 @@ def set_language(lang):
     if lang in supported_locales:
         session['language'] = lang
     return redirect(request.referrer or url_for('index'))
+
+
+@app.route('/admin/email/cc', methods=['GET', 'POST'])
+def manage_email_cc():
+    """管理抄送邮箱"""
+    if not session.get('admin_logged_in'):
+        return jsonify({'error': '未授权'}), 401
+
+    if request.method == 'GET':
+        try:
+            cc_emails = EmailCC.query.order_by(EmailCC.created_at.desc()).all()
+            return jsonify({
+                'cc_emails': [cc.to_dict() for cc in cc_emails]
+            })
+        except Exception as e:
+            print(f"获取抄送邮箱错误: {e}")
+            return jsonify({'error': '获取数据失败'}), 500
+
+    elif request.method == 'POST':
+        form = EmailCCForm()
+        if form.validate_on_submit():
+            try:
+                # 检查邮箱是否已存在
+                existing = EmailCC.query.filter_by(email=form.email.data).first()
+                if existing:
+                    return jsonify({'error': '该邮箱已存在'}), 400
+
+                cc_email = EmailCC(email=form.email.data)
+                db.session.add(cc_email)
+                db.session.commit()
+                return jsonify({'message': '抄送邮箱添加成功', 'cc_email': cc_email.to_dict()})
+            except Exception as e:
+                print(f"添加抄送邮箱错误: {e}")
+                return jsonify({'error': '数据库操作失败'}), 500
+        else:
+            return jsonify({'error': '表单验证失败', 'details': form.errors}), 400
+
+
+@app.route('/admin/email/cc/<int:id>', methods=['PUT', 'DELETE'])
+def email_cc_detail(id):
+    """更新或删除抄送邮箱"""
+    if not session.get('admin_logged_in'):
+        return jsonify({'error': '未授权'}), 401
+
+    try:
+        cc_email = EmailCC.query.get_or_404(id)
+    except Exception:
+        return jsonify({'error': '抄送邮箱未找到'}), 404
+
+    if request.method == 'PUT':
+        # 切换激活状态
+        try:
+            data = request.get_json()
+            if 'is_active' in data:
+                cc_email.is_active = data['is_active']
+                db.session.commit()
+                return jsonify({'message': '状态更新成功', 'cc_email': cc_email.to_dict()})
+            else:
+                return jsonify({'error': '缺少必要参数'}), 400
+        except Exception as e:
+            print(f"更新抄送邮箱错误: {e}")
+            return jsonify({'error': '更新失败'}), 500
+
+    elif request.method == 'DELETE':
+        try:
+            db.session.delete(cc_email)
+            db.session.commit()
+            return jsonify({'message': '抄送邮箱删除成功'})
+        except Exception as e:
+            print(f"删除抄送邮箱错误: {e}")
+            return jsonify({'error': '删除失败'}), 500
+
 
 if __name__ == '__main__':
     # 本地开发时运行
