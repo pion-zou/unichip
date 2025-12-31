@@ -1,0 +1,200 @@
+<!-- templates/about.html -->
+{% extends "base.html" %}
+
+{% block title %}ABOUT US | 芯片网站{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ABOUT US 页面特有样式 */
+    .about-content {
+        margin-top: 40px;
+        padding: 2rem 5%;
+        min-height: calc(100vh - 200px);
+        background-color: #f8f9fa;
+    }
+
+    .about-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .about-title {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 3px solid #0066cc;
+        text-align: center;
+    }
+
+    .about-subtitle {
+        color: #34495e;
+        font-size: 1.5rem;
+        margin: 1.5rem 0 1rem 0;
+        padding-left: 0.5rem;
+        border-left: 4px solid #3498db;
+    }
+
+    .about-text {
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+    }
+
+    .about-list {
+        margin-left: 2rem;
+        line-height: 1.8;
+        color: #555;
+    }
+
+    .about-list li {
+        margin-bottom: 0.8rem;
+        font-size: 1.1rem;
+    }
+
+    .about-highlight {
+        color: #0066cc;
+        font-weight: 600;
+    }
+
+    .about-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .about-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .about-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .about-card-title {
+        color: #2c3e50;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .about-card-title i {
+        margin-right: 10px;
+        color: #3498db;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 768px) {
+        .about-content {
+            padding: 1rem;
+        }
+
+        .about-section {
+            padding: 1.5rem;
+        }
+
+        .about-title {
+            font-size: 2rem;
+        }
+
+        .about-subtitle {
+            font-size: 1.3rem;
+        }
+
+        .about-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-content">
+    <div class="about-section">
+        <h1 class="about-title">ABOUT US</h1>
+
+        <div class="about-text">
+            <p>成立于2010年，我们是一家专注于电子元器件领域的专业供应商。凭借多年的行业经验和技术积累，我们致力于为客户提供高品质的芯片产品和解决方案。</p>
+
+            <p>我们与全球多家知名半导体制造商建立了稳固的合作关系，确保为客户提供原装正品、价格合理、交货及时的产品和服务。</p>
+        </div>
+
+        <h2 class="about-subtitle">企业使命</h2>
+        <p class="about-text">以客户为中心，以创新为驱动，致力于成为电子元器件供应链中最值得信赖的合作伙伴，为行业发展和社会进步创造价值。</p>
+
+        <h2 class="about-subtitle" id="company">公司简介</h2>
+        <p class="about-text">我们是一家集研发、销售、技术支持于一体的高新技术企业。公司总部位于深圳，在北京、上海、成都等地设有办事处和仓储中心，服务网络覆盖全国。</p>
+
+        <h2 class="about-subtitle" id="team">团队介绍</h2>
+        <p class="about-text">我们拥有一支经验丰富、专业高效的技术和销售团队，其中核心成员均具有10年以上的行业经验，能够为客户提供专业的技术支持和解决方案。</p>
+
+        <div class="about-grid">
+            <div class="about-card">
+                <h3 class="about-card-title"><i class="fas fa-chart-line"></i> 行业经验</h3>
+                <p>核心团队成员拥有平均超过15年的行业经验，熟悉各类芯片应用场景和市场动态。</p>
+            </div>
+
+            <div class="about-card">
+                <h3 class="about-card-title"><i class="fas fa-award"></i> 专业资质</h3>
+                <p>获得多项行业认证，与全球多家知名半导体厂商建立正式代理合作关系。</p>
+            </div>
+
+            <div class="about-card">
+                <h3 class="about-card-title"><i class="fas fa-users"></i> 客户服务</h3>
+                <p>提供7x24小时技术支持，快速响应客户需求，为客户提供定制化解决方案。</p>
+            </div>
+
+            <div class="about-card">
+                <h3 class="about-card-title"><i class="fas fa-globe"></i> 全球网络</h3>
+                <p>与全球主要半导体产区建立稳定的供应链网络，确保货源充足、价格竞争力强。</p>
+            </div>
+        </div>
+
+        <h2 class="about-subtitle">核心优势</h2>
+        <ul class="about-list">
+            <li><span class="about-highlight">技术实力雄厚：</span>拥有专业的FAE团队，为客户提供全面的技术支持和解决方案。</li>
+            <li><span class="about-highlight">严格的质量控制：</span>建立完善的质量管理体系，确保所有产品均符合行业标准。</li>
+            <li><span class="about-highlight">完善的售前售后服务：</span>从产品选型到技术支持，为客户提供全程跟踪服务。</li>
+            <li><span class="about-highlight">全球化的供应链网络：</span>与全球多家知名半导体制造商建立长期稳定的合作关系。</li>
+            <li><span class="about-highlight">快速响应机制：</span>建立高效的订单处理和物流配送体系，确保及时交付。</li>
+            <li><span class="about-highlight">灵活的商务政策：</span>为客户提供多样化的合作模式和灵活的付款方式。</li>
+        </ul>
+
+        <h2 class="about-subtitle">发展历程</h2>
+        <div class="about-text">
+            <p><strong>2010年：</strong>公司成立，专注于芯片分销业务</p>
+            <p><strong>2013年：</strong>获得多个国际知名品牌的代理授权</p>
+            <p><strong>2015年：</strong>建立专业的技术支持团队，开始提供解决方案服务</p>
+            <p><strong>2018年：</strong>完成全国主要城市的办事处布局</p>
+            <p><strong>2020年：</strong>引入先进的ERP系统，实现供应链数字化管理</p>
+            <p><strong>2023年：</strong>推出在线库存查询系统，提升客户服务体验</p>
+        </div>
+
+        <h2 class="about-subtitle">企业文化</h2>
+        <p class="about-text">我们秉承"诚信、专业、创新、共赢"的核心价值观，坚持以客户需求为导向，以技术创新为动力，以优质服务为根本，致力于与客户、供应商和员工共同成长，创造更大的价值。</p>
+
+        <div style="margin-top: 3rem; padding: 2rem; background-color: #f0f8ff; border-radius: 8px; border-left: 5px solid #0066cc;">
+            <h3 style="color: #0066cc; margin-bottom: 1rem;">联系我们</h3>
+            <p>如果您对我们的产品和服务感兴趣，或有任何疑问，欢迎随时与我们联系。我们的专业团队将竭诚为您服务。</p>
+            <p style="margin-top: 1rem;">
+                <a href="{{ url_for('contact_page') }}" class="btn btn-primary" style="padding: 0.5rem 1.5rem;">
+                    <i class="fas fa-envelope"></i> 立即联系我们
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}2025 芯片网站 | ABOUT US 页面{% endblock %}

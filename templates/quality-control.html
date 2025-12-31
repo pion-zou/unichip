@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUALITY CONTROL | 企业名称</title>
+    <style>
+        /* 导航栏样式与首页一致（复制首页的style部分） */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            width: 100%;
+            background-color: #2c3e50;
+            padding: 1rem 5%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem;
+        }
+        .nav-link {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #3498db;
+        }
+        .nav-link:hover {
+            color: #3498db;
+        }
+        .lang-select {
+            position: relative;
+        }
+        .lang-btn {
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .lang-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #34495e;
+            border-radius: 4px;
+            padding: 0.5rem 0;
+            display: none;
+            min-width: 80px;
+        }
+        .lang-select:hover .lang-dropdown {
+            display: block;
+        }
+        .lang-option {
+            color: #fff;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            display: block;
+        }
+        .lang-option:hover {
+            background-color: #2c3e50;
+        }
+        .content {
+            margin-top: 80px;
+            padding: 2rem 5%;
+            min-height: calc(100vh - 80px);
+        }
+        .section {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .qc-process {
+            margin: 1.5rem 0;
+            line-height: 1.8;
+        }
+        .qc-cert {
+            margin: 2rem 0;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .cert-item {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏（与首页一致） -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="about.html" class="nav-link">ABOUT US</a>
+                <a href="line-card.html" class="nav-link">LINE CARD</a>
+                <a href="quality-control.html" class="nav-link active">QUALITY CONTROL</a>
+                <a href="contact.html" class="nav-link">CONTACT US</a>
+            </div>
+            <div class="lang-select">
+                <button class="lang-btn">
+                    EN <<i>▼</</i>
+                </button>
+                <div class="lang-dropdown">
+                    <a href="#" class="lang-option">EN</a>
+                    <a href="#" class="lang-option">中文</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- QUALITY CONTROL 内容 -->
+    <div class="content">
+        <div class="section">
+            <h2>质量控制体系</h2>
+            <p style="margin: 1rem 0;">我们始终将质量视为企业的生命线，建立了从原材料采购到成品交付的全流程质量控制体系：</p>
+
+            <div class="qc-process">
+                <h3>1. 原材料检验</h3>
+                <p>所有原材料入库前均经过严格的检验，确保符合行业标准和企业要求，拒绝不合格原料。</p>
+
+                <h3 style="margin-top: 1rem;">2. 生产过程监控</h3>
+                <p>关键生产工序设置质量控制点，实时监控生产参数，及时发现并解决质量隐患。</p>
+
+                <h3 style="margin-top: 1rem;">3. 成品检测</h3>
+                <p>成品出厂前进行全面检测，包括性能测试、外观检验、尺寸测量等，确保产品100%合格。</p>
+
+                <h3 style="margin-top: 1rem;">4. 售后服务质量跟踪</h3>
+                <p>建立客户反馈机制，跟踪产品使用情况，持续优化产品质量和服务水平。</p>
+            </div>
+
+            <h3>获得认证</h3>
+            <div class="qc-cert">
+                <div class="cert-item">ISO 9001 质量管理体系认证</div>
+                <div class="cert-item">行业专项质量认证</div>
+                <div class="cert-item">国际标准符合性认证</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
