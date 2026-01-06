@@ -689,5 +689,9 @@ def email_cc_detail(id):
 
 if __name__ == '__main__':
     # 本地开发时运行
+    import sys
+    print(f"Python版本: {sys.version}")
+    print("启动Flask应用...")
     port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    print(f"监听端口: {port}")
+    app.run(debug=True, host='0.0.0.0', port=port, use_reloader=True)

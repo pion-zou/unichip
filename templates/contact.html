@@ -1,244 +1,283 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CONTACT US | 企业名称</title>
+    <title>{{ _('CONTACT US | UniChip') }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* 导航栏样式与首页一致（复制首页的style部分） */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+        body {
+            background-color: #f8f9fa;
         }
-        .navbar {
-            width: 100%;
-            background-color: #2c3e50;
-            padding: 1rem 5%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 999;
-        }
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-menu {
-            display: flex;
-            gap: 2.5rem;
-        }
-        .nav-link {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: 500;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-color: #3498db;
-        }
-        .nav-link:hover {
-            color: #3498db;
-        }
-        .lang-select {
-            position: relative;
-        }
-        .lang-btn {
-            background-color: transparent;
-            color: #fff;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        .lang-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background-color: #34495e;
-            border-radius: 4px;
-            padding: 0.5rem 0;
-            display: none;
-            min-width: 80px;
-        }
-        .lang-select:hover .lang-dropdown {
-            display: block;
-        }
-        .lang-option {
-            color: #fff;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            display: block;
-        }
-        .lang-option:hover {
-            background-color: #2c3e50;
-        }
-        .content {
-            margin-top: 80px;
-            padding: 2rem 5%;
-            min-height: calc(100vh - 80px);
-        }
-        .section {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .contact-container {
-            display: flex;
-            gap: 3rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-        .contact-info {
-            flex: 1;
-            min-width: 300px;
-        }
-        .contact-form {
-            flex: 1;
-            min-width: 300px;
-        }
-        .info-item {
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .info-icon {
-            color: #3498db;
+
+        .navbar-brand {
+            font-weight: bold;
             font-size: 1.5rem;
         }
-        .form-group {
-            margin-bottom: 1.2rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #2c3e50;
+
+        .navbar-nav .nav-link {
+            color: #0066cc;
             font-weight: 500;
+            padding: 0.5rem 1rem;
         }
-        input, textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
+
+        .navbar-nav .nav-link:hover {
+            color: #0052a3;
         }
-        textarea {
-            resize: vertical;
-            min-height: 120px;
+
+        .navbar-nav .nav-link.active {
+            color: #123F7A;
+            border-bottom: 2px solid #123F7A;
         }
-        .submit-btn {
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
+
+        .navbar-nav .nav-item {
+            margin-right: 1rem;
         }
-        .submit-btn:hover {
-            background-color: #2980b9;
+
+        .navbar-nav .nav-item:last-child {
+            margin-right: 0;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            background-color: #343a40;
         }
     </style>
 </head>
+
 <body>
-    <!-- 导航栏（与首页一致） -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">HOME</a>
-                <a href="about.html" class="nav-link">ABOUT US</a>
-                <a href="line-card.html" class="nav-link">LINE CARD</a>
-                <a href="quality-control.html" class="nav-link">QUALITY CONTROL</a>
-                <a href="contact.html" class="nav-link active">CONTACT US</a>
-            </div>
-            <div class="lang-select">
-                <button class="lang-btn">
-                    EN <<i>▼</</i>
-                </button>
-                <div class="lang-dropdown">
-                    <a href="#" class="lang-option">EN</a>
-                    <a href="#" class="lang-option">中文</a>
-                </div>
+
+    <!-- 导航栏 -->
+    <div style="height: 2px; background-color: #123F7A; margin-top: 0px;">
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-microchip"></i>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">HOME</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            ABOUT US
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+                            <li><a class="dropdown-item" href="/about">About UniChip</a></li>
+                            <li><a class="dropdown-item" href="/about#mission">Our Mission</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="/line-card" id="lineCardDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            LINE CARD
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="lineCardDropdown">
+                            <li><a class="dropdown-item" href="/line-card">Active</a></li>
+                            <li><a class="dropdown-item" href="/line-card#passive">Passive</a></li>
+                            <li><a class="dropdown-item" href="/line-card#connector">Connector</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/quality-control">
+                            QUALITY CONTROL
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/contact">CONTACT US</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button"
+                            data-bs-toggle="dropdown">
+                            {{ _('语言') }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='en') }}">English</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='fr') }}">Français</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='ja') }}">日本語</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='zh') }}">中文</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
+        <div style="height: 10px; background-color: #010B17;">
     </nav>
 
+    <!-- 顶部大图 -->
+    <div class="container-fluid p-0" style="position: relative; max-height: 60vh;">
+        <img src="/static/images/contact/top.png" class="img-fluid w-100" style="max-height: 60vh; object-fit: cover;"
+            alt="Contact Us">
+    </div>
+
     <!-- CONTACT US 内容 -->
-    <div class="content">
+    <div class="container mt-5">
         <div class="section">
-            <h2>联系我们</h2>
-            <p style="margin: 1rem 0;">如果您有任何疑问、需求或合作意向，欢迎通过以下方式联系我们：</p>
+            <h2 class="text-center mb-4">Contact Us</h2>
+
+            <div class="card mb-4 p-4 shadow-sm">
+                <h3 class="mb-3 pb-2 border-bottom">UniChip Tech HK Limited</h3>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p><strong>Address:</strong> UNIT 11, 9/F THE CLOUD NO.111 TUNG CHAU ST TAI KOK TSUI HK</p>
+                        <p><strong>Email:</strong> peggy@unichip.hk</p>
+                        <p><strong>Tel.:</strong> +852-63624234</p>
+                    </div>
+                </div>
+            </div>
 
             <div class="contact-container">
-                <div class="contact-info">
-                    <div class="info-item">
-                        <span class="info-icon">📞</span>
-                        <div>
-                            <h4>电话</h4>
-                            <p>+123-456-7890</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">📧</span>
-                        <div>
-                            <h4>邮箱</h4>
-                            <p>info@company.com</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">📍</span>
-                        <div>
-                            <h4>地址</h4>
-                            <p>XX市XX区XX街道XX号XX大厦XX层</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">⌚</span>
-                        <div>
-                            <h4>工作时间</h4>
-                            <p>周一至周五：9:00 - 18:00</p>
-                        </div>
-                    </div>
-                </div>
+                <form id="contactForm" class="mt-4">
+                    <!-- CSRF令牌 -->
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <div class="contact-form">
-                    <form>
-                        <div class="form-group">
-                            <label for="name">您的姓名</label>
-                            <input type="text" id="name" required>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="name" class="form-label">*Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required
+                                placeholder="Please enter">
                         </div>
-                        <div class="form-group">
-                            <label for="email">您的邮箱</label>
-                            <input type="email" id="email" required>
+                        <div class="col-md-3">
+                            <label for="company" class="form-label">*Company</label>
+                            <input type="text" class="form-control" id="company" name="company" required
+                                placeholder="Please enter">
                         </div>
-                        <div class="form-group">
-                            <label for="subject">主题</label>
-                            <input type="text" id="subject" required>
+                        <div class="col-md-3">
+                            <label for="phone" class="form-label">*Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" required
+                                placeholder="Please enter">
                         </div>
-                        <div class="form-group">
-                            <label for="message">留言内容</label>
-                            <textarea id="message" required></textarea>
+                        <div class="col-md-3">
+                            <label for="email" class="form-label">*Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required
+                                placeholder="Please enter">
                         </div>
-                        <button type="submit" class="submit-btn">发送留言</button>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="message" class="form-label">*Question</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required
+                            placeholder="Please enter"></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg w-100"
+                            style="background-color: #123F7A; border-color: #123F7A;">
+                            Submit
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    <!-- 联系结果消息 -->
+    <div id="contactResult" class="mt-3 container" style="display: none;"></div>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>{{ _('UniChip 电子芯片') }}</h5>
+                    <p>{{ _('专业的电子元器件供应商') }}</p>
+                    <p>{{ _('提供各类芯片库存查询和采购服务') }}</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h5>{{ _('联系我们') }}</h5>
+                    <p>{{ _('邮箱') }}: peggy@unichip.hk</p>
+                    <p>{{ _('电话') }}: +852-63624234</p>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 {{ _('UniChip 电子芯片库存查询系统. 保留所有权利.') }}</p>
+                <p class="mt-2">
+                    <a href="/admin/login" class="text-white-50">{{ _('管理员登录') }}</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- 翻译数据 -->
+    <div id="translations" data-submit-success="信息已提交，我们会尽快联系您" data-submit-failed="提交失败" style="display: none;"></div>
+
+    <script>
+        // 获取翻译
+        const translationsElement = document.getElementById('translations');
+        const trans = translationsElement ? translationsElement.dataset : {};
+
+        // 获取CSRF令牌
+        function getCSRFToken() {
+            const csrfInput = document.querySelector('input[name="csrf_token"]');
+            if (csrfInput) {
+                return csrfInput.value;
+            }
+            console.warn('CSRF token not found! Using empty token.');
+            return '';
+        }
+
+        // 联系表单
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            fetch('/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        showContactMessage(`${trans.submitFailed || '提交失败'}: ${data.error}`, false);
+                    } else {
+                        showContactMessage(trans.submitSuccess || '信息已提交，我们会尽快联系您', true);
+                        this.reset();
+                    }
+                })
+                .catch(error => {
+                    showContactMessage(trans.submitFailed || '提交失败，请重试', false);
+                    console.error('Contact Error:', error);
+                });
+        });
+
+        function showContactMessage(message, isSuccess) {
+            const resultEl = document.getElementById('contactResult');
+            resultEl.innerHTML = `
+                <div class="alert ${isSuccess ? 'alert-success' : 'alert-danger'} alert-dismissible fade show">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            resultEl.style.display = 'block';
+
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                resultEl.style.display = 'none';
+            }, 3000);
+        }
+    </script>
 </body>
+
 </html>
