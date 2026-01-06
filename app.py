@@ -316,6 +316,35 @@ def index():
     contact_form = ContactForm()
     return render_template('index.html', search_form=search_form, contact_form=contact_form, get_locale=get_locale)
 
+# 在app.py现有路由后添加以下代码
+# 1. ABOUT US 页面路由
+@app.route('/about')
+def about():
+    search_form = SearchForm()  # 复用搜索表单（若页面需要）
+    contact_form = ContactForm()  # 复用联系表单（若页面需要）
+    return render_template('about.html', search_form=search_form, contact_form=contact_form, get_locale=get_locale)
+
+# 2. LINE CARD 页面路由
+@app.route('/line-card')
+def line_card():
+    search_form = SearchForm()
+    contact_form = ContactForm()
+    return render_template('line-card.html', search_form=search_form, contact_form=contact_form, get_locale=get_locale)
+
+# 3. QUALITY CONTROL 页面路由
+@app.route('/quality-control')
+def quality_control():
+    search_form = SearchForm()
+    contact_form = ContactForm()
+    return render_template('quality-control.html', search_form=search_form, contact_form=contact_form, get_locale=get_locale)
+
+# 4. CONTACT US 页面路由
+@app.route('/contact')
+def contact_page():  # 注意：原已有/contact POST路由，这里用GET渲染页面，避免冲突
+    search_form = SearchForm()
+    contact_form = ContactForm()
+    return render_template('contact.html', search_form=search_form, contact_form=contact_form, get_locale=get_locale)
+
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -660,5 +689,9 @@ def email_cc_detail(id):
 
 if __name__ == '__main__':
     # 本地开发时运行
+    import sys
+    print(f"Python版本: {sys.version}")
+    print("启动Flask应用...")
     port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    print(f"监听端口: {port}")
+    app.run(debug=True, host='0.0.0.0', port=port, use_reloader=True)
