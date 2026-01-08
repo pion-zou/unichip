@@ -309,6 +309,14 @@ def handle_csrf_error(e):
     return jsonify({'error': 'CSRF验证失败，请刷新页面重试'}), 400
 
 
+# 语言设置路由
+@app.route('/set-language/<lang>')
+def set_language(lang):
+    # 验证语言是否受支持
+    if lang in app.config['BABEL_SUPPORTED_LOCALES']:
+        session['language'] = lang
+    return redirect(request.referrer or url_for('index'))
+
 # 路由
 @app.route('/')
 def index():
@@ -606,14 +614,6 @@ def admin_logout():
 @app.route('/health')
 def health():
     return jsonify({'status': 'ok', 'message': '应用运行正常'})
-
-
-@app.route('/set_language/<lang>')
-def set_language(lang):
-    supported_locales = app.config.get('BABEL_SUPPORTED_LOCALES', ['zh', 'en'])
-    if lang in supported_locales:
-        session['language'] = lang
-    return redirect(request.referrer or url_for('index'))
 
 
 @app.route('/admin/email/cc', methods=['GET', 'POST'])

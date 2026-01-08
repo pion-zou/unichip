@@ -1,14 +1,14 @@
 # Translations template for PROJECT.
-# Copyright (C) 2025 ORGANIZATION
+# Copyright (C) 2026 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-12-17 11:33+0800\n"
+"POT-Creation-Date: 2026-01-08 14:06+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,227 +17,560 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: templates/index.html:68 templates/index.html:77 test_translation_load.py:43
+#: templates/index-test.html:68 templates/index-test.html:77
+#: templates/index.html:227 templates/index.html:236
+#: test_translation_load.py:43
 msgid "电子芯片库存查询系统"
 msgstr ""
 
-#: templates/index.html:7
+#: templates/about.html:8 templates/about.html:186 templates/contact.html:71
+#: templates/index.html:165 templates/line-card.html:190
+#: templates/quality-control.html:71
+msgid "ABOUT US"
+msgstr ""
+
+#: templates/about.html:8 templates/index-test.html:7 templates/index.html:7
 msgid "UniChip 电子芯片库存查询"
 msgstr ""
 
-#: templates/index.html:24 templates/index.html:267
-msgid "UniChip 电子芯片"
+#: templates/about.html:181 templates/contact.html:66 templates/index.html:160
+#: templates/line-card.html:185 templates/quality-control.html:66
+msgid "HOME"
 msgstr ""
 
-#: templates/index.html:33
-msgid "查询库存"
+#: templates/about.html:189 templates/about.html:252 templates/contact.html:74
+#: templates/index.html:168 templates/line-card.html:193
+#: templates/quality-control.html:74
+msgid "About UniChip"
 msgstr ""
 
-#: templates/index.html:38 templates/index.html:197 templates/index.html:272
-msgid "联系我们"
+#: templates/about.html:190 templates/about.html:266 templates/contact.html:75
+#: templates/index.html:169 templates/line-card.html:194
+#: templates/quality-control.html:75
+msgid "Our Mission"
 msgstr ""
 
-#: templates/index.html:43
-msgid "管理员"
+#: templates/about.html:196 templates/contact.html:81 templates/index.html:175
+#: templates/line-card.html:7 templates/line-card.html:200
+#: templates/quality-control.html:81
+msgid "LINE CARD"
 msgstr ""
 
-#: templates/index.html:48
+#: templates/about.html:199 templates/contact.html:84 templates/index.html:178
+#: templates/line-card.html:203 templates/line-card.html:257
+#: templates/quality-control.html:84
+msgid "Active"
+msgstr ""
+
+#: templates/about.html:200 templates/contact.html:85 templates/index.html:179
+#: templates/line-card.html:204 templates/line-card.html:315
+#: templates/quality-control.html:85
+msgid "Passive"
+msgstr ""
+
+#: templates/about.html:201 templates/contact.html:86 templates/index.html:180
+#: templates/line-card.html:205 templates/line-card.html:353
+#: templates/quality-control.html:86
+msgid "Connector"
+msgstr ""
+
+#: templates/about.html:206 templates/contact.html:91 templates/index.html:185
+#: templates/line-card.html:210 templates/quality-control.html:7
+#: templates/quality-control.html:91
+msgid "QUALITY CONTROL"
+msgstr ""
+
+#: templates/about.html:210 templates/contact.html:7 templates/contact.html:95
+#: templates/index.html:189 templates/line-card.html:214
+#: templates/quality-control.html:95
+msgid "CONTACT US"
+msgstr ""
+
+#: templates/about.html:217 templates/contact.html:102
+#: templates/index-test.html:48 templates/index.html:196
+#: templates/line-card.html:221 templates/quality-control.html:102
 msgid "语言"
 msgstr ""
 
-#: templates/index.html:65
-msgid "调试信息"
+#: templates/about.html:255
+msgid ""
+"stands as a\n"
+"                            trusted independent distributor, catering to "
+"a diverse range of high-growth markets such as\n"
+"                            Consumer Electronics, Internet of Things "
+"(IoT), Automotive Electronics, Industrial Control,\n"
+"                            Medical Devices, Smart Metering, and "
+"Aerospace & Defense. Committed to delivering\n"
+"                            exceptional value to global OEMs and ODMs, we"
+" specialize in offering tailored procurement\n"
+"                            solutions, reliable supply chain support, and"
+" competitive sourcing services. Our core\n"
+"                            advantage lies in our deep industry "
+"expertise, extensive global supplier network, and\n"
+"                            unwavering commitment to quality—enabling us "
+"to be the trusted, go-to supply partner for\n"
+"                            manufacturers seeking efficiency, "
+"reliability, and long-term collaboration."
 msgstr ""
 
-#: templates/index.html:66
-msgid "Session语言"
+#: templates/about.html:269
+msgid ""
+"Customer First is our only way to do business. Saving time and cost for "
+"our customer\n"
+"                            is our primary goal. Our mission is to help "
+"locate All chips you want, and find solution to\n"
+"                            your hard to find and obsolete parts."
 msgstr ""
 
-#: templates/index.html:66
-msgid "未设置"
+#: templates/about.html:274
+msgid ""
+"Our guiding slogan, \"Enjoy work, embrace growth\", underscores our "
+"commitment to\n"
+"                            fostering a fulfilling, supportive workplace "
+"where every team member benefits from clear\n"
+"                            career advancement paths and a culture of "
+"mutual respect."
 msgstr ""
 
-#: templates/index.html:67
-msgid "Babel语言"
+#: templates/about.html:289 templates/contact.html:7 templates/contact.html:196
+#: templates/index-test.html:24 templates/index-test.html:267
+#: templates/index.html:547 templates/line-card.html:7
+#: templates/line-card.html:389 templates/quality-control.html:7
+#: templates/quality-control.html:381
+msgid "UniChip 电子芯片"
 msgstr ""
 
-#: templates/index.html:68
-msgid "翻译测试"
-msgstr ""
-
-#: templates/index.html:79
-msgid "快速查询芯片库存信息，获取实时报价"
-msgstr ""
-
-#: templates/index.html:87
-msgid "芯片库存查询"
-msgstr ""
-
-#: templates/index.html:97 templates/index.html:296
-msgid "请输入芯片型号"
-msgstr ""
-
-#: templates/index.html:101
-msgid "例如: STM32F103C8T6"
-msgstr ""
-
-#: templates/index.html:103
-msgid "查询"
-msgstr ""
-
-#: templates/index.html:107
-msgid "提示：支持模糊查询，输入部分型号即可查找"
-msgstr ""
-
-#: templates/index.html:114
-msgid "查询结果"
-msgstr ""
-
-#: templates/index.html:132
-msgid "芯片信息"
-msgstr ""
-
-#: templates/index.html:136
-msgid "型号："
-msgstr ""
-
-#: templates/index.html:140
-msgid "描述："
-msgstr ""
-
-#: templates/index.html:144
-msgid "库存："
-msgstr ""
-
-#: templates/index.html:151
-msgid "价格："
-msgstr ""
-
-#: templates/index.html:161
-msgid "库存说明"
-msgstr ""
-
-#: templates/index.html:166 templates/index.html:298
-msgid "充足"
-msgstr ""
-
-#: templates/index.html:167
-msgid "库存 > 10"
-msgstr ""
-
-#: templates/index.html:170 templates/index.html:299
-msgid "少量"
-msgstr ""
-
-#: templates/index.html:171
-msgid "0 < 库存 ≤ 10"
-msgstr ""
-
-#: templates/index.html:174 templates/index.html:300
-msgid "缺货"
-msgstr ""
-
-#: templates/index.html:175
-msgid "库存 = 0"
-msgstr ""
-
-#: templates/index.html:183
-msgid "需要更多？立即咨询"
-msgstr ""
-
-#: templates/index.html:208
-msgid "公司名"
-msgstr ""
-
-#: templates/index.html:214
-msgid "姓名"
-msgstr ""
-
-#: templates/index.html:222 templates/index.html:273
-msgid "邮箱"
-msgstr ""
-
-#: templates/index.html:228 templates/index.html:274
-msgid "电话"
-msgstr ""
-
-#: templates/index.html:235
-msgid "留言"
-msgstr ""
-
-#: templates/index.html:238
-msgid "例如：我需要1000个该型号芯片，请提供报价和交货时间"
-msgstr ""
-
-#: templates/index.html:242
-msgid "提交信息"
-msgstr ""
-
-#: templates/index.html:251
-msgid "重要提示"
-msgstr ""
-
-#: templates/index.html:253
-msgid "提交后，您的信息将被发送到管理员邮箱，我们会在1-2个工作日内与您联系。"
-msgstr ""
-
-#: templates/index.html:254
-msgid "如有紧急需求，请直接拨打我们的服务电话。"
-msgstr ""
-
-#: templates/index.html:268
+#: templates/about.html:290 templates/contact.html:197
+#: templates/index-test.html:268 templates/index.html:548
+#: templates/line-card.html:390 templates/quality-control.html:382
 msgid "专业的电子元器件供应商"
 msgstr ""
 
-#: templates/index.html:269
+#: templates/about.html:291 templates/contact.html:198
+#: templates/index-test.html:269 templates/index.html:549
+#: templates/line-card.html:391 templates/quality-control.html:383
 msgid "提供各类芯片库存查询和采购服务"
 msgstr ""
 
-#: templates/index.html:279
+#: templates/about.html:294 templates/contact.html:201
+#: templates/index-test.html:38 templates/index-test.html:197
+#: templates/index-test.html:272 templates/index.html:476
+#: templates/index.html:552 templates/line-card.html:394
+#: templates/quality-control.html:386
+msgid "联系我们"
+msgstr ""
+
+#: templates/about.html:295 templates/contact.html:202
+#: templates/index-test.html:222 templates/index-test.html:273
+#: templates/index.html:501 templates/index.html:553
+#: templates/line-card.html:395 templates/quality-control.html:387
+msgid "邮箱"
+msgstr ""
+
+#: templates/about.html:296 templates/contact.html:203
+#: templates/index-test.html:228 templates/index-test.html:274
+#: templates/index.html:507 templates/index.html:554
+#: templates/line-card.html:396 templates/quality-control.html:388
+msgid "电话"
+msgstr ""
+
+#: templates/about.html:301 templates/contact.html:208
+#: templates/index-test.html:279 templates/index.html:559
+#: templates/line-card.html:401 templates/quality-control.html:393
 msgid "UniChip 电子芯片库存查询系统. 保留所有权利."
 msgstr ""
 
-#: templates/index.html:281 templates/login.html:17
+#: templates/about.html:303 templates/contact.html:210
+#: templates/index-test.html:281 templates/index.html:561
+#: templates/line-card.html:403 templates/login.html:17
+#: templates/quality-control.html:395
 msgid "管理员登录"
 msgstr ""
 
-#: templates/index.html:293
+#: templates/index-test.html:33
+msgid "查询库存"
+msgstr ""
+
+#: templates/index-test.html:43 templates/index.html:211
+msgid "管理员"
+msgstr ""
+
+#: templates/index-test.html:65 templates/index.html:224
+msgid "调试信息"
+msgstr ""
+
+#: templates/index-test.html:66 templates/index.html:225
+msgid "Session语言"
+msgstr ""
+
+#: templates/index-test.html:66 templates/index.html:225
+msgid "未设置"
+msgstr ""
+
+#: templates/index-test.html:67 templates/index.html:226
+msgid "Babel语言"
+msgstr ""
+
+#: templates/index-test.html:68 templates/index.html:227
+msgid "翻译测试"
+msgstr ""
+
+#: templates/index-test.html:79 templates/index.html:238
+msgid "快速查询芯片库存信息，获取实时报价"
+msgstr ""
+
+#: templates/index-test.html:87
+msgid "芯片库存查询"
+msgstr ""
+
+#: templates/index-test.html:97 templates/index-test.html:296
+#: templates/index.html:269 templates/index.html:573
+msgid "请输入芯片型号"
+msgstr ""
+
+#: templates/index-test.html:101 templates/index.html:273
+msgid "例如: STM32F103C8T6"
+msgstr ""
+
+#: templates/index-test.html:103 templates/index.html:276
+msgid "查询"
+msgstr ""
+
+#: templates/index-test.html:107 templates/index.html:280
+msgid "提示：支持模糊查询，输入部分型号即可查找"
+msgstr ""
+
+#: templates/index-test.html:114 templates/index.html:287
+msgid "查询结果"
+msgstr ""
+
+#: templates/index-test.html:132 templates/index.html:307
+msgid "芯片信息"
+msgstr ""
+
+#: templates/index-test.html:136 templates/index.html:311
+msgid "型号："
+msgstr ""
+
+#: templates/index-test.html:140 templates/index.html:316
+msgid "描述："
+msgstr ""
+
+#: templates/index-test.html:144 templates/index.html:320
+msgid "库存："
+msgstr ""
+
+#: templates/index-test.html:151 templates/index.html:327
+msgid "价格："
+msgstr ""
+
+#: templates/index-test.html:161 templates/index.html:338
+msgid "库存说明"
+msgstr ""
+
+#: templates/index-test.html:166 templates/index-test.html:298
+#: templates/index.html:343 templates/index.html:574
+msgid "充足"
+msgstr ""
+
+#: templates/index-test.html:167 templates/index.html:344
+msgid "库存 > 10"
+msgstr ""
+
+#: templates/index-test.html:170 templates/index-test.html:299
+#: templates/index.html:347 templates/index.html:574
+msgid "少量"
+msgstr ""
+
+#: templates/index-test.html:171 templates/index.html:349
+msgid "0 < 库存 ≤ 10"
+msgstr ""
+
+#: templates/index-test.html:174 templates/index-test.html:300
+#: templates/index.html:351 templates/index.html:575
+msgid "缺货"
+msgstr ""
+
+#: templates/index-test.html:175 templates/index.html:353
+msgid "库存 = 0"
+msgstr ""
+
+#: templates/index-test.html:183 templates/index.html:362
+msgid "需要更多？立即咨询"
+msgstr ""
+
+#: templates/index-test.html:208 templates/index.html:487
+msgid "公司名"
+msgstr ""
+
+#: templates/index-test.html:214 templates/index.html:493
+msgid "姓名"
+msgstr ""
+
+#: templates/index-test.html:235 templates/index.html:514
+msgid "留言"
+msgstr ""
+
+#: templates/index-test.html:238 templates/index.html:517
+msgid "例如：我需要1000个该型号芯片，请提供报价和交货时间"
+msgstr ""
+
+#: templates/index-test.html:242 templates/index.html:522
+msgid "提交信息"
+msgstr ""
+
+#: templates/index-test.html:251 templates/index.html:531
+msgid "重要提示"
+msgstr ""
+
+#: templates/index-test.html:253 templates/index.html:533
+msgid "提交后，您的信息将被发送到管理员邮箱，我们会在1-2个工作日内与您联系。"
+msgstr ""
+
+#: templates/index-test.html:254 templates/index.html:534
+msgid "如有紧急需求，请直接拨打我们的服务电话。"
+msgstr ""
+
+#: templates/index-test.html:293 templates/index.html:572
 msgid "查询中..."
 msgstr ""
 
-#: templates/index.html:294
+#: templates/index-test.html:294 templates/index.html:572
 msgid "查询成功！"
 msgstr ""
 
-#: templates/index.html:295
+#: templates/index-test.html:295 templates/index.html:573
 msgid "查询失败，请重试"
 msgstr ""
 
-#: templates/index.html:297
+#: templates/index-test.html:297 templates/index.html:574
 msgid "未找到芯片"
 msgstr ""
 
-#: templates/index.html:301
+#: templates/index-test.html:301 templates/index.html:575
 msgid "价格面议"
 msgstr ""
 
-#: templates/index.html:302
+#: templates/index-test.html:302 templates/index.html:575
 msgid "提交失败，请重试"
 msgstr ""
 
-#: templates/index.html:303
+#: templates/index-test.html:303 templates/index.html:576
 msgid "信息已提交，我们会尽快联系您"
 msgstr ""
 
-#: templates/index.html:363
+#: templates/index-test.html:363 templates/index.html:636
 msgid "无描述"
 msgstr ""
 
-#: templates/index.html:434
+#: templates/index-test.html:434 templates/index.html:707
 msgid "我对型号"
 msgstr ""
 
-#: templates/index.html:434
+#: templates/index-test.html:434 templates/index.html:707
 msgid "感兴趣，请提供详细报价和交货时间。"
+msgstr ""
+
+#: templates/index.html:252
+msgid "WHAT WE DO"
+msgstr ""
+
+#: templates/index.html:257
+msgid ""
+"Integrate high-quality global sources from Asia, Europe and North "
+"America,\n"
+"                                    accurately match you with the best "
+"price—save time and money!"
+msgstr ""
+
+#: templates/index.html:398
+msgid "1. Consumer Electronic"
+msgstr ""
+
+#: templates/index.html:407
+msgid "2. IOT"
+msgstr ""
+
+#: templates/index.html:416
+msgid "3. Industrial Computer"
+msgstr ""
+
+#: templates/index.html:425
+msgid "4. Industrial Automation"
+msgstr ""
+
+#: templates/index.html:433
+msgid "5. Medical"
+msgstr ""
+
+#: templates/index.html:442
+msgid "6. Automotive"
+msgstr ""
+
+#: templates/index.html:451
+msgid "7. Defense and Arospace"
+msgstr ""
+
+#: templates/quality-control.html:134
+msgid ""
+"Measurement, Programming &\n"
+"                            Solderability"
+msgstr ""
+
+#: templates/quality-control.html:137
+msgid "高精度测量、编程和可焊性测试设备"
+msgstr ""
+
+#: templates/quality-control.html:148
+msgid "Metallurgical Microscope"
+msgstr ""
+
+#: templates/quality-control.html:149
+msgid "金相显微镜，用于材料微观结构分析"
+msgstr ""
+
+#: templates/quality-control.html:161
+msgid "I/V Curve Tracer"
+msgstr ""
+
+#: templates/quality-control.html:162
+msgid "电流-电压曲线 tracer，用于器件特性分析"
+msgstr ""
+
+#: templates/quality-control.html:173
+msgid "X-Ray Machines"
+msgstr ""
+
+#: templates/quality-control.html:174
+msgid "X射线设备，用于内部结构检测"
+msgstr ""
+
+#: templates/quality-control.html:188
+msgid "Quality"
+msgstr ""
+
+#: templates/quality-control.html:193
+msgid "Policy"
+msgstr ""
+
+#: templates/quality-control.html:196
+msgid ""
+"Returns\n"
+"                Policy"
+msgstr ""
+
+#: templates/quality-control.html:203
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/quality-control.html:204
+msgid ""
+"Maintaining our reputation requires a complete commitment to quality "
+"control and\n"
+"                    customer service. As an experienced industry leader, "
+"we are committed to respecting and protecting\n"
+"                    our customer's privacy. We use security measures "
+"designed to protect against the loss, misuse and\n"
+"                    mistaken alteration of data used by our system. Under"
+" no circumstances will we share your personal\n"
+"                    information with any third party, except in the "
+"circumstance where we are legally compelled to do\n"
+"                    so. Otherwise, no one gets access to your "
+"information, ever. We do not sell or rent any such\n"
+"                    information."
+msgstr ""
+
+#: templates/quality-control.html:212
+msgid "Terms & Conditions"
+msgstr ""
+
+#: templates/quality-control.html:220
+msgid ""
+"After the PO confirmation, Sales orders are not subject to cancellation "
+"or\n"
+"                                    change\n"
+"                                    unless authorized by Achieve."
+msgstr ""
+
+#: templates/quality-control.html:232
+msgid ""
+"Neither party shall be responsible for delays in deliveries caused by "
+"strike,\n"
+"                                    shortage of material, delays in "
+"transportation, or other contingencies beyond that\n"
+"                                    no parties control."
+msgstr ""
+
+#: templates/quality-control.html:244
+msgid ""
+"All shipments will be made Ex-work Shenzhen CN or HK CN. The buyer should"
+" pay\n"
+"                                    the\n"
+"                                    shipping fee and has the right to "
+"select the carrier. Buyer assumes all\n"
+"                                    responsibility for material lost or "
+"damaged in transit."
+msgstr ""
+
+#: templates/quality-control.html:257
+msgid ""
+"Buyer shall inspect all Goods promptly upon receipt thereof and may "
+"reject any\n"
+"                                    Goods\n"
+"                                    that are damaged, defective, or fail "
+"in any material way to meet manufacturer's\n"
+"                                    specifications. To reject any Goods, "
+"buyer must notify Seller in writing of its\n"
+"                                    rejection and the reason within 15 "
+"days after receipt the package (for new and\n"
+"                                    unused items) & within 365 days for "
+"used items."
+msgstr ""
+
+#: templates/quality-control.html:273
+msgid "Returns Policy"
+msgstr ""
+
+#: templates/quality-control.html:274
+msgid ""
+"We offer 365 days quality warranty (From the dispatch date). In the rare "
+"situation\n"
+"                    that\n"
+"                    a customer may need to return product purchased from "
+"Allchip Electronic, a request for an RMA should\n"
+"                    be as follows:"
+msgstr ""
+
+#: templates/quality-control.html:286
+msgid ""
+"Download an RMA request form below, complete it, and send to your sales\n"
+"                                    representative within 15 days of "
+"receipt of goods (for new and unused items) &\n"
+"                                    within 365 days for used items."
+msgstr ""
+
+#: templates/quality-control.html:298
+msgid ""
+"To help expedite your request, please include any photos and/or failure "
+"and\n"
+"                                    test\n"
+"                                    reports. Authorization to return "
+"product will only be issued after the information\n"
+"                                    provided has been fully reviewed."
+msgstr ""
+
+#: templates/quality-control.html:311
+msgid ""
+"Unless the Seller notifies the Buyer in writing of a Return Material\n"
+"                                    Authorization\n"
+"                                    ('RMA') number, the Buyer shall "
+"arrange returned shipment. Within ten (10) days\n"
+"                                    after receipt of the written RMA "
+"number, Buyer shall return to Seller the rejected\n"
+"                                    Goods, freight prepaid, with the RMA "
+"number displayed on the outside of the carton.\n"
+"                                    Seller reserves the right to refuse "
+"to accept any rejected Goods where the RMA\n"
+"                                    number is not so displayed."
 msgstr ""
 

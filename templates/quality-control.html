@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ _('QUALITY CONTROL | UniChip 电子芯片') }}</title>
+    <title>{{ _('QUALITY CONTROL') }} | {{ _('UniChip 电子芯片') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -63,36 +63,36 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/">HOME</a>
+                        <a class="nav-link" aria-current="page" href="/">{{ _('HOME') }}</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            ABOUT US
+                            {{ _('ABOUT US') }}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
-                            <li><a class="dropdown-item" href="/about">About UniChip</a></li>
-                            <li><a class="dropdown-item" href="/about#mission">Our Mission</a></li>
+                            <li><a class="dropdown-item" href="/about">{{ _('About UniChip') }}</a></li>
+                            <li><a class="dropdown-item" href="/about#mission">{{ _('Our Mission') }}</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="/line-card" id="lineCardDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            LINE CARD
+                            {{ _('LINE CARD') }}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="lineCardDropdown">
-                            <li><a class="dropdown-item" href="/line-card">Active</a></li>
-                            <li><a class="dropdown-item" href="/line-card#passive">Passive</a></li>
-                            <li><a class="dropdown-item" href="/line-card#connector">Connector</a></li>
+                            <li><a class="dropdown-item" href="/line-card">{{ _('Active') }}</a></li>
+                            <li><a class="dropdown-item" href="/line-card#passive">{{ _('Passive') }}</a></li>
+                            <li><a class="dropdown-item" href="/line-card#connector">{{ _('Connector') }}</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="#quality">
-                            QUALITY CONTROL
+                            {{ _('QUALITY CONTROL') }}
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/contact">CONTACT US</a>
+                        <a class="nav-link" href="/contact">{{ _('CONTACT US') }}</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -108,6 +108,8 @@
                             </li>
                             <li><a class="dropdown-item" href="{{ url_for('set_language', lang='ja') }}">日本語</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('set_language', lang='zh') }}">中文</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('set_language', lang='ru') }}">Русский</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -129,9 +131,10 @@
             <div class="col-md-6 mb-4">
                 <div class="d-flex align-items-center bg-light p-3 rounded shadow">
                     <div class="flex-grow-1 me-3">
-                        <h4 class="text-primary" style="font-size: 1.2rem;">Measurement, Programming & Solderability
+                        <h4 class="text-primary" style="font-size: 1.2rem;">{{ _('Measurement, Programming &
+                            Solderability') }}
                         </h4>
-                        <p class="text-muted" style="font-size: 0.9rem;">高精度测量、编程和可焊性测试设备</p>
+                        <p class="text-muted" style="font-size: 0.9rem;">{{ _('高精度测量、编程和可焊性测试设备') }}</p>
                     </div>
                     <div class="flex-shrink-0">
                         <img src="/static/images/quality/1.png" class="img-fluid rounded"
@@ -142,8 +145,8 @@
             <div class="col-md-6 mb-4">
                 <div class="d-flex align-items-center bg-light p-3 rounded shadow">
                     <div class="flex-grow-1 me-3">
-                        <h4 class="text-primary" style="font-size: 1.2rem;">Metallurgical Microscope</h4>
-                        <p class="text-muted" style="font-size: 0.9rem;">金相显微镜，用于材料微观结构分析</p>
+                        <h4 class="text-primary" style="font-size: 1.2rem;">{{ _('Metallurgical Microscope') }}</h4>
+                        <p class="text-muted" style="font-size: 0.9rem;">{{ _('金相显微镜，用于材料微观结构分析') }}</p>
                     </div>
                     <div class="flex-shrink-0">
                         <img src="/static/images/quality/2.png" class="img-fluid rounded"
@@ -155,8 +158,8 @@
             <div class="col-md-6 mb-4">
                 <div class="d-flex align-items-center bg-light p-3 rounded shadow">
                     <div class="flex-grow-1 me-3">
-                        <h4 class="text-primary" style="font-size: 1.2rem;">I/V Curve Tracer</h4>
-                        <p class="text-muted" style="font-size: 0.9rem;">电流-电压曲线 tracer，用于器件特性分析</p>
+                        <h4 class="text-primary" style="font-size: 1.2rem;">{{ _('I/V Curve Tracer') }}</h4>
+                        <p class="text-muted" style="font-size: 0.9rem;">{{ _('电流-电压曲线 tracer，用于器件特性分析') }}</p>
                     </div>
                     <div class="flex-shrink-0">
                         <img src="/static/images/quality/3.png" class="img-fluid rounded"
@@ -167,8 +170,8 @@
             <div class="col-md-6 mb-4">
                 <div class="d-flex align-items-center bg-light p-3 rounded shadow">
                     <div class="flex-grow-1 me-3">
-                        <h4 class="text-primary" style="font-size: 1.2rem;">X-Ray Machines</h4>
-                        <p class="text-muted" style="font-size: 0.9rem;">X射线设备，用于内部结构检测</p>
+                        <h4 class="text-primary" style="font-size: 1.2rem;">{{ _('X-Ray Machines') }}</h4>
+                        <p class="text-muted" style="font-size: 0.9rem;">{{ _('X射线设备，用于内部结构检测') }}</p>
                     </div>
                     <div class="flex-shrink-0">
                         <img src="/static/images/quality/4.png" class="img-fluid rounded"
@@ -182,76 +185,81 @@
     <!-- Quality 部分 -->
     <div id="quality" class="container mt-8 mb-8">
         <div class="text-center mb-6">
-            <h2 class="display-5" style="font-weight: bold;">Quality</h2>
+            <h2 class="display-5" style="font-weight: bold;">{{ _('Quality') }}</h2>
         </div>
         <div class="text-center mb-6">
             <button class="btn btn-outline-primary px-4 py-2 rounded-pill" id="policyBtn" onclick="switchTab('policy')"
-                style="margin-right: 10px; margin-top: 10px; margin-bottom: 10px; background-color: white; color: #007bff; border-color: #007bff;">Policy</button>
+                style="margin-right: 10px; margin-top: 10px; margin-bottom: 10px; background-color: white; color: #007bff; border-color: #007bff;">{{
+                _('Policy') }}</button>
             <button class="btn btn-primary px-4 py-2 rounded-pill" id="returnsBtn" onclick="switchTab('returns')"
-                style="margin-top: 10px; margin-bottom: 10px; background-color: #007bff; border-color: #007bff;">Returns
-                Policy</button>
+                style="margin-top: 10px; margin-bottom: 10px; background-color: #007bff; border-color: #007bff;">{{
+                _('Returns
+                Policy') }}</button>
         </div>
 
         <!-- Policy Tab -->
         <div id="policyTab" class="tab-content" style="display: none;">
             <div class="bg-light p-5 rounded shadow">
-                <h3 class="text-primary mb-4">Privacy Policy</h3>
-                <p class="mb-4">Maintaining our reputation requires a complete commitment to quality control and
+                <h3 class="text-primary mb-4">{{ _('Privacy Policy') }}</h3>
+                <p class="mb-4">{{ _('Maintaining our reputation requires a complete commitment to quality control and
                     customer service. As an experienced industry leader, we are committed to respecting and protecting
-                    our customer's privacy. We use security measures designed to protect against the loss, misuse and
+                    our customer\'s privacy. We use security measures designed to protect against the loss, misuse and
                     mistaken alteration of data used by our system. Under no circumstances will we share your personal
                     information with any third party, except in the circumstance where we are legally compelled to do
                     so. Otherwise, no one gets access to your information, ever. We do not sell or rent any such
-                    information.</p>
+                    information.') }}</p>
 
-                <h3 class="text-primary mb-4">Terms & Conditions</h3>
+                <h3 class="text-primary mb-4">{{ _('Terms & Conditions') }}</h3>
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <div class="d-flex">
-                            <div class="bg-warning text-white rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
-                                style="width: 36px; height: 36px; font-weight: bold;">
+                            <div class="bg-warning text-white flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
+                                style="width: 36px; height: 36px; font-weight: bold; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);">
                                 01</div>
                             <div>
-                                <p>After the PO confirmation, Sales orders are not subject to cancellation or change
-                                    unless authorized by Achieve.</p>
+                                <p>{{ _('After the PO confirmation, Sales orders are not subject to cancellation or
+                                    change
+                                    unless authorized by Achieve.') }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
                         <div class="d-flex">
-                            <div class="bg-info text-white rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
-                                style="width: 36px; height: 36px; font-weight: bold;">
+                            <div class="bg-info text-white flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
+                                style="width: 36px; height: 36px; font-weight: bold; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);">
                                 02</div>
                             <div>
-                                <p>Neither party shall be responsible for delays in deliveries caused by strike,
+                                <p>{{ _('Neither party shall be responsible for delays in deliveries caused by strike,
                                     shortage of material, delays in transportation, or other contingencies beyond that
-                                    no parties control.</p>
+                                    no parties control.') }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
                         <div class="d-flex">
-                            <div class="bg-danger text-white rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
-                                style="width: 36px; height: 36px; font-weight: bold;">
+                            <div class="bg-danger text-white flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
+                                style="width: 36px; height: 36px; font-weight: bold; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);">
                                 03</div>
                             <div>
-                                <p>All shipments will be made Ex-work Shenzhen CN or HK CN. The buyer should pay the
+                                <p>{{ _('All shipments will be made Ex-work Shenzhen CN or HK CN. The buyer should pay
+                                    the
                                     shipping fee and has the right to select the carrier. Buyer assumes all
-                                    responsibility for material lost or damaged in transit.</p>
+                                    responsibility for material lost or damaged in transit.') }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 mb-4">
                         <div class="d-flex">
-                            <div class="bg-success text-white rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
-                                style="width: 36px; height: 36px; font-weight: bold;">
+                            <div class="bg-success text-white flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
+                                style="width: 36px; height: 36px; font-weight: bold; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);">
                                 04</div>
                             <div>
-                                <p>Buyer shall inspect all Goods promptly upon receipt thereof and may reject any Goods
-                                    that are damaged, defective, or fail in any material way to meet manufacturer's
+                                <p>{{ _('Buyer shall inspect all Goods promptly upon receipt thereof and may reject any
+                                    Goods
+                                    that are damaged, defective, or fail in any material way to meet manufacturer\'s
                                     specifications. To reject any Goods, buyer must notify Seller in writing of its
                                     rejection and the reason within 15 days after receipt the package (for new and
-                                    unused items) & within 365 days for used items.</p>
+                                    unused items) & within 365 days for used items.') }}</p>
                             </div>
                         </div>
                     </div>
@@ -262,53 +270,55 @@
         <!-- Returns Policy Tab -->
         <div id="returnsTab" class="tab-content">
             <div class="bg-light p-5 rounded shadow">
-                <h3 class="text-primary mb-4">Returns Policy</h3>
-                <p class="mb-4">We offer 365 days quality warranty (From the dispatch date). In the rare situation that
+                <h3 class="text-primary mb-4">{{ _('Returns Policy') }}</h3>
+                <p class="mb-4">{{ _('We offer 365 days quality warranty (From the dispatch date). In the rare situation
+                    that
                     a customer may need to return product purchased from Allchip Electronic, a request for an RMA should
-                    be as follows:</p>
+                    be as follows:') }}</p>
 
                 <div class="row">
                     <div class="col-md-12 mb-4">
                         <div class="d-flex">
-                            <div class="bg-warning text-white rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
-                                style="width: 36px; height: 36px; font-weight: bold;">
+                            <div class="bg-warning text-white flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
+                                style="width: 36px; height: 36px; font-weight: bold; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);">
                                 01</div>
                             <div>
-                                <p>Download an RMA request form below, complete it, and send to your sales
+                                <p>{{ _('Download an RMA request form below, complete it, and send to your sales
                                     representative within 15 days of receipt of goods (for new and unused items) &
-                                    within 365 days for used items.</p>
+                                    within 365 days for used items.') }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-4">
                         <div class="d-flex">
-                            <div class="bg-info text-white rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
-                                style="width: 36px; height: 36px; font-weight: bold;">
+                            <div class="bg-info text-white flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
+                                style="width: 36px; height: 36px; font-weight: bold; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);">
                                 02</div>
                             <div>
-                                <p>To help expedite your request, please include any photos and/or failure and test
+                                <p>{{ _('To help expedite your request, please include any photos and/or failure and
+                                    test
                                     reports. Authorization to return product will only be issued after the information
-                                    provided has been fully reviewed.</p>
+                                    provided has been fully reviewed.') }}</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-4">
                         <div class="d-flex">
-                            <div class="bg-danger text-white rounded-circle flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
-                                style="width: 36px; height: 36px; font-weight: bold;">
+                            <div class="bg-danger text-white flex-shrink-0 d-flex align-items-center justify-content-center mr-3"
+                                style="width: 36px; height: 36px; font-weight: bold; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);">
                                 03</div>
                             <div>
-                                <p>Unless the Seller notifies the Buyer in writing of a Return Material Authorization
-                                    ('RMA') number, the Buyer shall arrange returned shipment. Within ten (10) days
+                                <p>{{ _('Unless the Seller notifies the Buyer in writing of a Return Material
+                                    Authorization
+                                    (\'RMA\') number, the Buyer shall arrange returned shipment. Within ten (10) days
                                     after receipt of the written RMA number, Buyer shall return to Seller the rejected
                                     Goods, freight prepaid, with the RMA number displayed on the outside of the carton.
                                     Seller reserves the right to refuse to accept any rejected Goods where the RMA
-                                    number is not so displayed.</p>
+                                    number is not so displayed.') }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="mt-4">Any questions, please contact your sales manager Sophia Long</p>
             </div>
         </div>
     </div>
@@ -368,7 +378,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>{{ _('UniChip 电子芯片') }}</h5>
+                    <h5>UniChip Tech</h5>
                     <p>{{ _('专业的电子元器件供应商') }}</p>
                     <p>{{ _('提供各类芯片库存查询和采购服务') }}</p>
                 </div>
@@ -380,7 +390,7 @@
             </div>
             <hr class="bg-light">
             <div class="text-center">
-                <p class="mb-0">&copy; 2023 {{ _('UniChip 电子芯片库存查询系统. 保留所有权利.') }}</p>
+                <p class="mb-0">&copy; 2023 UniChip Tech. {{ _('保留所有权利.') }}</p>
                 <p class="mt-2">
                     <a href="/admin/login" class="text-white-50">{{ _('管理员登录') }}</a>
                 </p>
