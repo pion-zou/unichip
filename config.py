@@ -97,7 +97,7 @@ class Config:
     # ====== 国际化配置 ======
     # Babel 配置
     BABEL_DEFAULT_LOCALE = 'en'
-    BABEL_SUPPORTED_LOCALES = ['zh', 'en', 'fr', 'ja']
+    BABEL_SUPPORTED_LOCALES = ['zh', 'en', 'fr', 'ja', 'ru']
     BABEL_TRANSLATION_DIRECTORIES = os.path.join(basedir, 'translations')  # 翻译文件目录
 
     # ====== 阿里云邮件推送 (DirectMail) 配置 ======
